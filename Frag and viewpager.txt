@@ -1,0 +1,128 @@
+
+Custom Tab and Viewpager Example (Multiple Fragment)
+
+
+private class ViewPagerAdapter extends FragmentStatePagerAdapter {
+
+        public int getCount() {
+            return 3;
+        }
+
+        public ViewPagerAdapter(FragmentManager fragmentManager) {
+            super(fragmentManager);
+        }
+
+        public Fragment getItem(int i) {
+            switch (i) {
+                case 0:
+                    return new Frag1();
+                case 1:
+                    return new Frag2();
+                case 2:
+                    return new Frag3();
+                default:
+                    return null;
+            }
+        }
+
+        public CharSequence getPageTitle(int i) {
+            return "Section " + i;
+        }
+    }
+
+
+Activity Example:
+
+
+    ViewPager viewPager;
+    ImageView cat1, add1, group1;
+
+
+@Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        getWindow().setFlags(1024, 1024);
+
+        cat1 = findViewById(R.id.cat1);
+        add1 = findViewById(R.id.add1);
+        group1 = findViewById(R.id.group1);
+        viewPager = findViewById(R.id.pager);
+
+        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
+        viewPager.setAdapter(adapter);
+
+       
+        group1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                group1.setImageResource(R.drawable.allgroups_press);
+                cat1.setImageResource(R.drawable.categories_unpress);
+                add1.setImageResource(R.drawable.addgroup_unprrss);
+                viewPager.setCurrentItem(0);
+            }
+        });
+
+        cat1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                group1.setImageResource(R.drawable.allgroups_unpress);
+                cat1.setImageResource(R.drawable.categories_press);
+                add1.setImageResource(R.drawable.addgroup_unprrss);
+                viewPager.setCurrentItem(1);
+            }
+        });
+
+        add1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                group1.setImageResource(R.drawable.allgroups_unpress);
+                cat1.setImageResource(R.drawable.categories_unpress);
+                add1.setImageResource(R.drawable.addgroup_prrss);
+                viewPager.setCurrentItem(2);
+            }
+        });
+
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                if (position == 0) {
+                    group1.performClick();
+                } else if (position == 1) {
+                    cat1.performClick();
+                } else {
+                    add1.performClick();
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+    }
+
+
+
+Fragment Example :
+
+
+public class Frag1 extends Fragment {
+
+    GridView list;
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View v = inflater.inflate(R.layout.activity_separate, container, false);
+
+        list = (GridView) v.findViewById(R.id.list);
+       
+
+        return v;
+    }
+}

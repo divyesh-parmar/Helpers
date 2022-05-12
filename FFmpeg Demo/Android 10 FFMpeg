@@ -1,0 +1,27 @@
+
+
+
+int rc = FFmpeg.execute("-i file1.mp4 -c:v mpeg4 file2.mp4");
+
+if (rc == RETURN_CODE_SUCCESS) {
+    Log.i(Config.TAG, "Command execution completed successfully.");
+} else if (rc == RETURN_CODE_CANCEL) {
+    Log.i(Config.TAG, "Command execution cancelled by user.");
+} else {
+    Log.i(Config.TAG, String.format("Command execution failed with rc=%d and the output below.", rc));
+    Config.printLastCommandOutput(Log.INFO);
+}
+
+long executionId = FFmpeg.executeAsync("-i file1.mp4 -c:v mpeg4 file2.mp4", new ExecuteCallback() {
+
+    @Override
+    public void apply(final long executionId, final int returnCode) {
+        if (returnCode == RETURN_CODE_SUCCESS) {
+            Log.i(Config.TAG, "Async command execution completed successfully.");
+        } else if (returnCode == RETURN_CODE_CANCEL) {
+            Log.i(Config.TAG, "Async command execution cancelled by user.");
+        } else {
+            Log.i(Config.TAG, String.format("Async command execution failed with returnCode=%d.", returnCode));
+        }
+    }
+});

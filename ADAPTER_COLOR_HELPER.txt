@@ -1,0 +1,7 @@
+if (position % 2 == 0) {
+			holder.llGridParentCell.setBackgroundColor(Color
+					.parseColor("#eae8e8"));
+		} else {
+			holder.llGridParentCell.setBackgroundColor(Color
+					.parseColor("#f1f0f0"));
+		}

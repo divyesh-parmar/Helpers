@@ -1,0 +1,21 @@
+public void showPopUp(View view, int layoutId) {
+		LayoutInflater inflater = (LayoutInflater) this
+				.getSystemService(LAYOUT_INFLATER_SERVICE);
+
+		RelativePopupWindow mPopupWindow = new RelativePopupWindow();
+
+		View customView = inflater.inflate(layoutId, null);
+
+		mPopupWindow.setContentView(customView);
+
+		mPopupWindow.setWidth(ViewGroup.LayoutParams.WRAP_CONTENT);
+		mPopupWindow.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
+		mPopupWindow.setFocusable(true);
+		mPopupWindow.setOutsideTouchable(true);
+		mPopupWindow
+				.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+		mPopupWindow.showOnAnchor(view, VerticalPosition.BELOW,
+				HorizontalPosition.RIGHT);
+
+	}

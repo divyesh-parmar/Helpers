@@ -1,0 +1,209 @@
+
+
+FFMEG Commands :
+
+
+//  Multiple Img Overlay on Single Image
+
+        FFmpeg.getInstance(SingleActivity.this).execute(new String[]
+                        {
+                                "-i",
+                                Utl.PATH,//Image Path
+                                "-loop",
+                                "1",
+                                "-i",
+                                inputImages,//D%D fold path
+                                "-i",
+                                Utl.Aud_PATH,//Audio Path
+                                "-filter_complex",
+                                "[1][0]scale2ref[i][m];[m][i]overlay[v]",
+                                "-map",
+                                "[v]",
+                                "-strict",
+                                "experimental",
+                                "-r",
+                                "" + (30.0f / 2.0f),
+                                "-t",
+                                Utl.Vid_Time,//Aud or Video Duration
+                                "-c:v",
+                                "libx264",
+                                "-preset",
+                                "ultrafast",
+                                "-pix_fmt",
+                                "yuv420p",
+                                "-ac",
+                                "2",
+                                demo}// out path
+
+
+//without audio Looping
+
+                                                 "-i",
+                                                 demo,	//ip vid path
+                                                 "-ss",
+                                                 "" + 0,
+                                                 "-i",
+                                                 Utl.Aud_PATH,//audpath
+                                                 "-c:v",
+                                                 "copy",
+                                                 "-c:a",
+                                                 "aac",
+                                                 "-strict",
+                                                 "experimental",
+                                                 "-t",
+                                                 Utl.Vid_Time,//vidpath
+                                                 "-preset",
+                                                 "ultrafast",
+                                                 tmpPath  //op path
+
+
+//with audio Looping
+
+                                                "-y",
+                                                "-i",
+                                                demo,//ip vid path
+                                                "-filter_complex",
+                                                "amovie=" + Utl.Aud_PATH + ":loop=0,asetpts=N/SR/TB[a]",
+                                                "-map",
+                                                "0:v",
+                                                "-map",
+                                                "[a]",
+                                                "-c:v",
+                                                "copy",
+                                                "-c:a",
+                                                "aac",
+                                                "-shortest",
+                                                "-preset",
+                                                "ultrafast",
+                                                tmpPath//op path
+
+
+//Multiple Overlay on Video
+
+
+ 								"-y",
+                                                                "-i",
+                                                                vid_pa,
+                                                                "-loop",
+                                                                "1",
+                                                                "-i",
+                                                                inputImages,//D%D fold
+                                                                "-filter_complex",
+                                                                "[1][0]scale2ref[i][m];[m][i]overlay[v]",
+                                                                "-map",
+                                                                "[v]",
+                                                                "-map",
+                                                                "0:a?",
+                                                                "-r",
+                                                                "" + (30.0f / 2.0f),
+                                                                "-t",
+                                                                vid_time,
+                                                                "-preset",
+                                                                "ultrafast",
+                                                                "-ac",
+                                                                "2",
+                                                                demoPath
+
+
+//Multiple Images to Video 
+
+File file2 = new File(Environment.getExternalStorageDirectory().toString() + "/" + mContext.getResources().getString(R.string.app_name) + "/" + ".tempCapture");
+        StringBuilder sb2 = new StringBuilder();
+        sb2.append(file2.getAbsolutePath());
+        sb2.append("/image%d.jpg");
+        String sb3 = sb2.toString();
+
+String[] strArr = {getFFmpeg(this.mContext), "-y", "-r", this.fps, "-i", sb3, "-vcodec", "libx264", "-pix_fmt", "yuv420p", "-preset", "ultrafast", this.outputPath};
+
+
+//Video Compression
+
+
+"-y", "-i", videoPath, "-s", "160x120", "-r", "25", "-vcodec", "mpeg4", "-b:v", "150k", "-b:a", "48000", "-ac", "2", "-ar", "22050", out_path
+
+
+//Reverse Video
+
+"-i", videoPath, "-vf", "reverse", "-af", "areverse", out_path
+
+//Change Music
+
+ 			    "-y",
+                            "-i",
+                            Utl.Vid_path_for_changemusic,
+                            "-filter_complex",
+                            "amovie=" + sel_audiopath + ":loop=0,asetpts=N/SR/TB[a]",
+                            "-map",
+                            "0:v",
+                            "-map",
+                            "[a]",
+                            "-c:v",
+                            "copy",
+                            "-c:a",
+                            "aac",
+                            "-shortest",
+                            "-preset",
+                            "ultrafast",
+                            out_path
+
+// Video to mp3
+
+				    "-y",
+                                    "-i",
+                                    out_path,//ip vidpath
+                                    "-vn",
+                                    "-ar",
+                                    "44100",
+                                    "-ac",
+                                    "2",
+                                    "-b:a",
+                                    "256k",
+                                    "-f",
+                                    "mp3",
+                                    "-preset",
+                                    "ultrafast",
+				    mt_path
+
+
+//Video to GIF
+
+				    "-ss",
+                                    "" + 0,
+                                    "-i",
+                                    out_path,//ip vidpath
+                                    "-t",
+                                    "" + videoLengthInSec2,
+                                    "-pix_fmt",
+                                    "rgb24",
+                                    "-preset",
+                                    "ultrafast",
+                                    mt_path
+
+
+//Video Trimm
+
+			"-y",
+                        "-i",
+                        vidPath,
+                        "-ss",
+                        "" + starttime,
+                        "-t",
+                        "" + endtime,
+                        "-c",
+                        "copy",
+                        "-preset",
+                        "ultrafast",
+                        out_path
+
+
+	
+//For more Commands:
+
+
+	https://ostechnix.com/20-ffmpeg-commands-beginners/
+
+	http://androidwarzone.blogspot.com/2011/12/ffmpeg4android.html
+
+
+
+

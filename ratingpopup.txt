@@ -1,0 +1,149 @@
+
+
+-->  Rating PopUp :
+
+    ImageView star1;
+    ImageView star2;
+    ImageView star3;
+    ImageView star4;
+    ImageView star5;
+    int x0 = R.drawable.empty;
+    int x1 = R.drawable.fill2;
+    int R_or_Not = 0;
+    int RatePriority;
+
+    public void PressClick(int s1, int s2, int s3, int s4, int s5, int LOW_HIGH) {
+        R_or_Not = 1;
+        RatePriority = LOW_HIGH;
+        star1.setImageResource(s1);
+        star2.setImageResource(s2);
+        star3.setImageResource(s3);
+        star4.setImageResource(s4);
+        star5.setImageResource(s5);
+    }
+
+    public void RatingLayout() {
+
+        if (Utl.get_INT(MainActivity.this, "rate", 0) == 0) {
+
+            if (BC_RATE == 0) {
+
+                BC_RATE++;
+
+                final Dialog xDialog = new Dialog(MainActivity.this);
+                xDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                xDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                xDialog.setCancelable(false);
+                xDialog.setContentView(R.layout.dialog_rating);
+
+                LinearLayout popuplay = xDialog.findViewById(R.id.popuplay);
+                ImageView notnow = xDialog.findViewById(R.id.notnow);
+                ImageView ratenow = xDialog.findViewById(R.id.ratenow);
+                final ImageView mygif = xDialog.findViewById(R.id.mygif);
+                star1 = xDialog.findViewById(R.id.star1);
+                star2 = xDialog.findViewById(R.id.star2);
+                star3 = xDialog.findViewById(R.id.star3);
+                star4 = xDialog.findViewById(R.id.star4);
+                star5 = xDialog.findViewById(R.id.star5);
+
+                Context cond = MainActivity.this;
+
+                Utl.SetUILinearVivo(cond, popuplay, 885, 1074);
+                Utl.SetUILinear(cond, notnow, 334, 113);
+                Utl.SetUILinear(cond, ratenow, 334, 113);
+                Utl.SetUILinear(cond, star1, 95, 92);
+                Utl.SetUILinear(cond, star2, 95, 92);
+                Utl.SetUILinear(cond, star3, 95, 92);
+                Utl.SetUILinear(cond, star4, 95, 92);
+                Utl.SetUILinear(cond, star5, 95, 92);
+                Utl.SetUILinear(cond, xDialog.findViewById(R.id.starlayout), 700, 110);
+                //   Glide.with(MORNINGGLORYAPPS_GallaryView.this).load(R.drawable.rategif).into(mygif);
+
+                notnow.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        xDialog.dismiss();
+                        finish();
+                    }
+                });
+
+                ratenow.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        if (R_or_Not == 1) {
+                            if (RatePriority == 1) {
+                                Utl.save_INT(MainActivity.this, "rate", 1);
+                                finish();
+
+                                try {
+                                    startActivity(new Intent("android.intent.action.VIEW",
+                                            Uri.parse("market://details?id=" + getPackageName())));
+                                } catch (Exception e) {
+                                    startActivity(new Intent("android.intent.action.VIEW",
+                                            Uri.parse("http://play.google.com/store/apps/details?id=" + getPackageName())));
+                                }
+                            } else {
+                                finish();
+                                Toast.makeText(MainActivity.this, "Thank you for your Feedback !", Toast.LENGTH_SHORT).show();
+                            }
+                            xDialog.dismiss();
+
+                        } else {
+                            Toast.makeText(MainActivity.this, "Please choose proper rating before rate now", Toast.LENGTH_SHORT).show();
+                        }
+
+                    }
+                });
+
+                star1.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        PressClick(x1, x0, x0, x0, x0, 0);
+                    }
+                });
+
+                star2.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        PressClick(x1, x1, x0, x0, x0, 0);
+                    }
+                });
+
+                star3.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        PressClick(x1, x1, x1, x0, x0, 0);
+                    }
+                });
+
+                star4.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        PressClick(x1, x1, x1, x1, x0, 1);
+                    }
+                });
+
+                star5.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        PressClick(x1, x1, x1, x1, x1, 1);
+                    }
+                });
+
+                xDialog.show();
+
+
+            } else {
+                BC_RATE++;
+
+                if (BC_RATE == 4) {
+                    BC_RATE = 0;
+                }
+                finish();
+            }
+        } else {
+            finish();
+        }
+    }

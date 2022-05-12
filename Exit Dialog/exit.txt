@@ -1,0 +1,78 @@
+ 
+//Exit Dialog
+
+@Override
+    public void onBackPressed() {
+//        super.onBackPressed();
+        final Dialog dialog1 = new Dialog(MainActivity.this);
+        dialog1.requestWindowFeature(Window.FEATURE_NO_TITLE);
+
+        dialog1.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+
+        dialog1.setContentView(R.layout.exit_dialog);
+
+//        TextView tv=(TextView)dialog1.findViewById(R.id.title);
+        ImageView yes = (ImageView) dialog1.findViewById(R.id.yes);
+        ImageView no = (ImageView) dialog1.findViewById(R.id.no);
+        ImageView rate = (ImageView) dialog1.findViewById(R.id.rate);
+        RelativeLayout boox = (RelativeLayout) dialog1.findViewById(R.id.boox);
+
+        RelativeLayout.LayoutParams fgg = new RelativeLayout.LayoutParams(
+                getResources().getDisplayMetrics().widthPixels * 910 / 1080,
+                getResources().getDisplayMetrics().heightPixels * 430 / 1920);
+        fgg.addRule(RelativeLayout.CENTER_IN_PARENT);
+        boox.setLayoutParams(fgg);
+
+
+        RelativeLayout.LayoutParams layoutParamssd = new RelativeLayout.LayoutParams(
+                getResources().getDisplayMetrics().widthPixels * 220 / 1080,
+                getResources().getDisplayMetrics().heightPixels * 120 / 1920);
+        layoutParamssd.addRule(RelativeLayout.CENTER_HORIZONTAL);
+        yes.setLayoutParams(layoutParamssd);
+        no.setLayoutParams(layoutParamssd);
+        rate.setLayoutParams(layoutParamssd);
+
+        yes.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
+                finishAffinity();
+                dialog1.dismiss();
+            }
+        });
+
+        rate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog1.dismiss();
+                startActivity(new Intent(
+                        "android.intent.action.VIEW",
+                        Uri.parse("https://play.google.com/store/apps/details?id="
+                                + getPackageName())));
+            }
+        });
+
+        no.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
+                dialog1.dismiss();
+
+                String shareBody = "Share this wonderfull app using--> \t \n" + "https://play.google.com/store/apps/details?id="
+                        + getPackageName();
+                Intent sharingIntent = new Intent(
+                        Intent.ACTION_SEND);
+
+                sharingIntent.setType("text/plain");
+
+                sharingIntent.putExtra(Intent.EXTRA_TEXT,
+                        shareBody);
+                startActivity(Intent.createChooser(sharingIntent,
+                        "Share using"));
+            }
+        });
+
+        dialog1.show();
+    }

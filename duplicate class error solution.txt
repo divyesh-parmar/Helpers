@@ -1,0 +1,25 @@
+
+
+
+
+Cause 1: java.util.concurrent.ExecutionException: java.lang.RuntimeException: Duplicate class android.support.v4.accessibilityservice.AccessibilityServiceInfoCompat found in modules classes.jar (com.android.support:support-compat:28.0.0) and classes.jar (com.android.support:support-v4:24.0.0)
+Duplicate class android.support.v4.app.ActionBarDrawerToggle found in modules classes.jar (com.android.support:support-core-ui:28.0.0) and classes.jar (com.android.support:support-v4:24.0.0)
+Duplicate class android.support.v4.app.ActionBarDrawerToggle$Delegate found in modules classes.jar (com.android.support:support-core-ui:28.0.0) and classes.jar (com.android.support:support-v4:24.0.0)
+Duplicate class android.support.v4.app.ActionBarDrawerToggle$DelegateProvider found in modules classes.jar (com.android.support:support-core-ui:28.0.0) and classes.jar (com.android.support:support-v4:24.0.0)
+Duplicate class android.support.v4.app.ActionBarDrawerToggle$SlideDrawable found in modules classes.jar (com.android.support:support-core-ui:28.0.0) and classes.jar (com.android.support:support-v4:24.0.0)
+Duplicate class android.support.v4.app.ActivityCompat found in modules classes.jar (com.android.support:support-compat:28.0.0) and classes.jar (com.android.support:support-v4:24.0.0)
+Duplicate class android.support.v4.app.ActivityCompat$1 found in modules classes.jar (com.android.support:support-compat:28.0.0) and classes.jar (com.android.support:support-v4:24.0.0)
+Duplicate class android.support.v4.app.ActivityCompat$OnRequestPermissionsResultCallback found in modules classes.jar (com.android.support:support-compat:28.0.0) and classes.jar (com.android.support:support-v4:24.0.0)
+Duplicate class android.support.v4.app.ActivityCompat$SharedElementCallback21Impl found in modules classes.jar (com.android.support:support-compat:28.0.0) and classes.jar (com.android.support:support-v4:24.0.0)
+Duplicate class android.support.v4.app.ActivityManagerCompat found in modules classes.jar (com.android.support:support-compat:28.0.0) and classes.jar (com.android.support:support-v4:24.0.0)
+
+
+
+Error SOlution :
+
+
+-   Open gradle.properties file 
+
+-   add this line in it :
+
+    android.enableJetifier=true

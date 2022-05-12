@@ -1,0 +1,59 @@
+//Multidex Solution
+
+//Create Class
+public class App extends MultiDexApplication {
+
+    private static App app;
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        app = this;
+    }
+
+    public static App getInstance() {
+        return app;
+    }
+
+}
+
+
+
+//In Manifest
+
+ <application
+        android:name=".App"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.Phonograph.Light"
+        tools:ignore="UnusedAttribute">
+
+.
+.
+.
+.
+</application>
+
+
+//In gradle file
+
+android {
+    defaultConfig {
+        ...
+        minSdkVersion 15 
+        targetSdkVersion 27
+        multiDexEnabled true
+    }
+    ...
+}
+
+dependencies {
+  compile 'com.android.support:multidex:1.0.3'
+}
+
+
+
+

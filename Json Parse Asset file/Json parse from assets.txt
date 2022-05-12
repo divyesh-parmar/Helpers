@@ -1,0 +1,71 @@
+
+
+//Json Parsing from AssetsFile
+
+
+	
+//OnCreate Code
+
+
+	try {
+
+            JSONArray jarray = new JSONArray(loadJSONFromAsset(MainActivity.this));
+
+            for (i = 0; i < jarray.length(); i++) {
+
+                JSONObject j1 = jarray.getJSONObject(i);
+
+                String job1 = j1.getString("stateName");
+                String job2 = j1.getString("stateCode");
+
+                states.add(job1);
+                codes.add(job2);
+
+            }
+            Log.e("ss", states.toString());
+            Log.e("ss2", codes.toString());
+
+            GalleryAdapter adapter = new GalleryAdapter(MainActivity.this, states, codes);
+            list.setAdapter(adapter);
+
+            list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    Utils.by_state = states.get(position);
+
+                    Intent in = new Intent(MainActivity.this, CityActivity.class);
+                    startActivity(in);
+                }
+            });
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+//Method of Json
+
+ public String loadJSONFromAsset(Context context) {
+        String json = null;
+        try {
+            InputStream is = context.getAssets().open("country.json");
+
+            int size = is.available();
+
+            byte[] buffer = new byte[size];
+
+            is.read(buffer);
+
+            is.close();
+
+            json = new String(buffer, "UTF-8");
+
+
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            return null;
+        }
+        return json;
+
+    }
+

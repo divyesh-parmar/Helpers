@@ -1,0 +1,54 @@
+//Interface Example
+
+//Create interface
+public interface Playinterface {
+
+    public void audiosong(int position);
+
+    public void moredata(String st);
+}
+
+
+//In Adapter Call click on button
+
+ Playinterface pif;
+
+
+ im_play.setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					
+					pif.audiosong(position);
+
+
+				}
+			});
+
+			im_more.setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					pif.moredata(title.get(position));
+				}
+			});
+
+
+
+//Where u will be use
+
+
+ adapter = new GalleryAdapter(Setcaller.this, getAssetFolderImage(Setcaller.this, "songs"), new Playinterface() {
+
+	 @Override
+            public void audiosong(int position) {
+
+	}
+
+	 @Override
+            public void moredata(final String st) {
+
+	}
+
+
+}
+
+

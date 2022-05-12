@@ -1,0 +1,53 @@
+//Get Profile Pic From Instagram
+
+//Here imgsrc is user_name and imageurlpaths is path of Image url
+
+class alluserdata extends AsyncTask<String, Void, String> {
+
+        @Override
+        protected String doInBackground(String... strings) {
+            try {
+                String substring = ((Element) Jsoup.connect("http://www.instagram.com/" + imgSrc).timeout(25000).get().body().select("script").get(0)).toString().substring(52);
+                imageurlpaths= new JSONObject(substring.substring(0, substring.length() - 10))
+                        .getJSONObject("entry_data").getJSONArray("ProfilePage")
+                        .getJSONObject(0).getJSONObject("graphql").getJSONObject("user")
+                        .getString("profile_pic_url_hd");
+                Log.e("checkuser-->",imageurlpaths);
+            } catch (IOException e) {
+                 e.printStackTrace();
+
+            } catch (JSONException e2) {
+                e2.printStackTrace();
+
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            try {
+                if(TextUtils.isEmpty(imageurlpaths)){
+                    progressBar.setVisibility(View.GONE);
+                    Toast.makeText(Anna_Image.this, "Invalid Url", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                Glide.with(Anna_Image.this).load(imageurlpaths).listener(new RequestListener<Drawable>() {
+                    @Override
+                    public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                        return false;
+                    }
+                }).into(imageView);
+            }catch (Exception e){
+
+            }
+
+        }
+    }
+

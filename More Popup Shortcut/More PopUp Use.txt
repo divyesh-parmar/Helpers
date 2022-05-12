@@ -1,0 +1,114 @@
+
+//Declaration
+
+ImageView mores;
+RelativePopupWindow mPopupWindow;
+
+//Bind
+
+ mores=findViewById(R.id.mores);
+
+//Call
+
+showPopUp(mores, R.layout.more_popup);
+
+//Method
+
+public void showPopUp(View view, int layoutId) {
+        LayoutInflater inflater = (LayoutInflater)
+                getSystemService(LAYOUT_INFLATER_SERVICE);
+
+
+        View customView = inflater.inflate(layoutId, null);
+        mPopupWindow=new RelativePopupWindow();
+        mPopupWindow.setContentView(customView);//154 height per item
+
+        mPopupWindow.setWidth(getResources().getDisplayMetrics().widthPixels * 520 / 1080);
+        mPopupWindow.setHeight(getResources().getDisplayMetrics().heightPixels * 520 / 1080);
+        mPopupWindow.setFocusable(true);
+        mPopupWindow.setOutsideTouchable(false);
+
+        LinearLayout pops = (LinearLayout) customView.findViewById(R.id.pops);
+
+        ImageView shareapp = (ImageView) customView.findViewById(R.id.sapp);
+        ImageView rateapp = (ImageView) customView.findViewById(R.id.rapp);
+        ImageView moreapp = (ImageView) customView.findViewById(R.id.mapp);
+        ImageView policy = (ImageView) customView.findViewById(R.id.papp);
+
+
+        LinearLayout.LayoutParams kjg = new LinearLayout.LayoutParams(
+                getResources().getDisplayMetrics().widthPixels * 520 / 1080,
+                getResources().getDisplayMetrics().heightPixels * 520 / 1920);
+
+        pops.setLayoutParams(kjg);
+
+        LinearLayout.LayoutParams fff = new LinearLayout.LayoutParams(
+                getResources().getDisplayMetrics().widthPixels * 411 / 1080,
+                getResources().getDisplayMetrics().heightPixels * 90 / 1920);
+
+        fff.gravity= Gravity.CENTER;
+
+        shareapp.setLayoutParams(fff);
+        rateapp.setLayoutParams(fff);
+        moreapp.setLayoutParams(fff);
+        policy.setLayoutParams(fff);
+
+        shareapp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mPopupWindow.dismiss();
+                String shareBody = "Hey I Have Download This Wonderful App.\n\nYou can also Download it From Below link\n\nhttps://play.google.com/store/apps/details?id="
+                        + getPackageName();
+                Intent sharingIntent = new Intent(
+                        android.content.Intent.ACTION_SEND);
+
+                sharingIntent.setType("text/plain");
+
+                sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT,
+                        shareBody);
+                startActivity(Intent.createChooser(sharingIntent,
+                        "Share using"));
+            }
+        });
+
+        rateapp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mPopupWindow.dismiss();
+                startActivity(new Intent(
+                        "android.intent.action.VIEW",
+                        Uri.parse("https://play.google.com/store/apps/details?id="
+                                + getPackageName())));
+            }
+        });
+
+        moreapp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mPopupWindow.dismiss();
+                try {
+                    String query = getResources().getString(R.string.dev_name); // change query here
+                    Intent intent = new Intent("android.intent.action.VIEW", Uri.parse
+                            ("market://search?q=" + query));
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                    startActivity(intent);
+
+                } catch (Exception e) {
+                }
+            }
+        });
+
+        policy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mPopupWindow.dismiss();
+                Intent in = new Intent(VideoList.this, PolicyAct.class);
+                startActivity(in);
+            }
+        });
+
+
+        mPopupWindow.showOnAnchor(view, RelativePopupWindow.VerticalPosition.BELOW,
+                RelativePopupWindow.HorizontalPosition.RIGHT);
+
+    }

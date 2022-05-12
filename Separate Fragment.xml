@@ -1,0 +1,210 @@
+
+Fragment Concepts :
+
+//Separate Fragment :
+
+
+public class FragActivity extends AppCompatActivity {
+
+    Button tab1, tab2, tab3;
+    FrameLayout myframe;
+    FragmentTransaction mytrans;
+    Frag1 frag1;
+    private Frag2 frag2;
+    private Frag3 frag3;
+    
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_frag);
+
+        tab1 = findViewById(R.id.tab1);
+        tab2 = findViewById(R.id.tab2);
+        tab3 = findViewById(R.id.tab3);
+        myframe = findViewById(R.id.framlay);
+
+        frag1 = new Frag1();
+        frag2 = new Frag2();
+        frag3 = new Frag3();
+        
+        
+        //Add Fragment 
+        mytrans = getSupportFragmentManager().beginTransaction();
+        mytrans.add(R.id.framlay, frag1);
+        mytrans.commit();
+        
+        
+
+        tab1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mytrans = getSupportFragmentManager().beginTransaction();
+                mytrans.replace(R.id.framlay, frag1);
+                mytrans.commit();
+               
+
+            }
+        });
+
+        tab2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mytrans = getSupportFragmentManager().beginTransaction();
+                mytrans.replace(R.id.framlay, frag2);
+                mytrans.commit();
+
+            }
+        });
+
+        tab3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mytrans = getSupportFragmentManager().beginTransaction();
+                mytrans.replace(R.id.framlay, frag3);
+                mytrans.commit();
+
+
+            }
+        });
+
+    }
+
+}
+
+
+
+//Activity Xml:
+
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".FragActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp">
+
+        <Button
+            android:id="@+id/tab1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="1"/>
+
+        <Button
+            android:id="@+id/tab2"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="2"/>
+
+        <Button
+            android:id="@+id/tab3"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="3"/>
+
+    </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/framlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+</LinearLayout>
+
+
+
+//Frag Declaration :
+
+
+public class Frag1 extends Fragment {
+
+
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
+
+        super.onCreateView(inflater, container, savedInstanceState);
+        View mvView = (View) inflater.inflate(R.layout.frag1,container,false);
+
+        TextView tv=mvView.findViewById(R.id.tv);
+
+        tv.setText("Fragment 1");
+        return mvView;
+    }
+}
+
+
+
+
+public class Frag2 extends Fragment {
+
+
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
+
+        super.onCreateView(inflater, container, savedInstanceState);
+        View mvView = (View) inflater.inflate(R.layout.frag1,container,false);
+
+        TextView tv=mvView.findViewById(R.id.tv);
+
+        tv.setText("Fragment 2");
+        return mvView;
+    }
+}
+
+
+
+
+public class Frag3 extends Fragment {
+
+
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
+
+        super.onCreateView(inflater, container, savedInstanceState);
+        View mvView = (View) inflater.inflate(R.layout.frag1,container,false);
+
+        TextView tv=mvView.findViewById(R.id.tv);
+
+        tv.setText("Fragment 3");
+        return mvView;
+    }
+}
+
+
+
+
+//Frag xml:
+
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center">
+
+    <TextView
+        android:id="@+id/tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="30dp"
+        android:gravity="center"
+        android:background="#fff"
+        android:text="Fragment 1"/>
+
+</LinearLayout>
+
+
+

@@ -1,0 +1,16 @@
+
+//Open Insta Profile from UserName
+
+
+ public static void OpenInstaProfile(Context cn,String user_name){
+        Uri uri = Uri.parse("http://instagram.com/_u/"+user_name);
+        Intent likeIng = new Intent(Intent.ACTION_VIEW, uri);
+        likeIng.setPackage("com.instagram.android");
+
+        try {
+            cn.startActivity(likeIng);
+        } catch (ActivityNotFoundException e) {
+            cn.startActivity(new Intent(Intent.ACTION_VIEW,
+                    Uri.parse("http://instagram.com/"+user_name)));
+        }
+    }

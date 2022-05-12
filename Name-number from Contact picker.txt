@@ -1,0 +1,57 @@
+
+//Name & Number Pick from Default Contact Picker
+
+	//  permission to read contacts
+
+  	<uses-permission android:name="android.permission.READ_CONTACTS"/>
+
+	 // Declare
+
+  	static final int PICK_CONTACT=69;
+
+	//Click Of Button
+
+	Intent intent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
+  	startActivityForResult(intent, PICK_CONTACT);
+
+	//OnActivityResult
+
+	 @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // TODO Auto-generated method stub
+        super.onActivityResult(requestCode, resultCode, data);
+
+	if (requestCode == 69) {
+
+            if (resultCode == RESULT_OK) {
+
+                Uri contactData = data.getData();
+                Cursor c = managedQuery(contactData, null, null, null, null);
+                if (c.moveToFirst()) {
+
+                    String id = c.getString(c.getColumnIndexOrThrow(ContactsContract.Contacts._ID));
+
+                    String hasPhone = c.getString(c.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER));
+
+                    if (hasPhone.equalsIgnoreCase("1")) {
+                        Cursor phones = getContentResolver().query(
+                                ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null,
+                                ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = " + id,
+                                null, null);
+                        phones.moveToFirst();
+                        String cNumber = phones.getString(phones.getColumnIndex("data1"));
+                        Number.setText(cNumber);
+                        Utl.save_STRING(MainActivity.this, "number", cNumber);
+                        System.out.println("number is:" + cNumber);
+                    }
+                    String name = c.getString(c.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
+
+                    Name.setText(name);
+                    Utl.save_STRING(MainActivity.this, "name", name);
+
+                }
+            }
+        }
+
+
+	}

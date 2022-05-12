@@ -1,0 +1,18 @@
+
+
+RangeSeekbar rangeSeekbar;
+
+
+//OnCreate
+
+
+rangeSeekbar = findViewById(R.id.rangeseekbar);
+
+
+rangeSeekbar.setOnSlideListener(new RangeSeekbar.OnSlideListener() {
+            @Override
+            public void onSlide(int i) {
+                //Where i is ur selected value
+               
+            }
+        });

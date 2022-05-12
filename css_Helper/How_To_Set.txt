@@ -1,0 +1,2 @@
+ wv = (WebView) findViewById(R.id.webView1);
+        wv.loadUrl("file:///android_asset/index.html");

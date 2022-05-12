@@ -1,0 +1,14 @@
+
+
+//Customize Seekbar Thumb
+
+Bitmap thumb = createThumb(BitmapFactory.decodeResource(getResources(),
+                R.drawable.pointer));
+        blendseek.setThumb(new BitmapDrawable(getResources(), thumb));
+
+
+public Bitmap createThumb(Bitmap bitmap) {
+        int sw = getResources().getDisplayMetrics().widthPixels * bitmap.getHeight() / 1080;
+        bitmap = Bitmap.createScaledBitmap(bitmap, sw, sw, true);
+        return bitmap;
+    }

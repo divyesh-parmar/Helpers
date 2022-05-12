@@ -1,0 +1,39 @@
+
+
+//Androidx Changes 
+
+
+	//Add this lines into gradle.properties
+
+	android.enableJetifier=true
+	android.useAndroidX=true
+
+
+	//Some Common dependencies for Androidx
+
+	implementation 'androidx.appcompat:appcompat:1.0.0'
+    	implementation 'androidx.recyclerview:recyclerview:1.0.0'
+    	implementation 'androidx.multidex:multidex:2.0.0'
+ 	implementation 'androidx.cardview:cardview:1.0.0'
+    	implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+
+	//Change Compile n Sdk version
+
+	set 29
+
+	//Change Android studio version in Main Gradle
+
+	classpath 'com.android.tools.build:gradle:3.2.1'
+
+	
+	//Change gradlewrapper properties
+
+	distributionUrl=https\://services.gradle.org/distributions/gradle-4.10.2-all.zip
+
+
+	//If you added some Module then ,
+
+	-> Change Module sdk versions
+	-> Change Module Dependency
+
+

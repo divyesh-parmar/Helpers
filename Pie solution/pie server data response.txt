@@ -1,0 +1,11 @@
+
+
+//Load Data From Server in PIE
+
+
+	//In Manifest: Application
+
+ android:networkSecurityConfig="@xml/network_security_config"
+
+
+	//Add xml Folder in Resource

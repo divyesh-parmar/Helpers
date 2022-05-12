@@ -1,0 +1,26 @@
+                    
+            //  Syntax for RxJava Code Async    
+                    
+                    progressBar.visibility = View.VISIBLE
+
+                    Observable.create(ObservableOnSubscribe<Int?> { emitter ->
+                        //Place doInBackground Code Here
+
+                        RxDownloadSong(output)  //function
+                        emitter.onNext(1)
+                    }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+                        .subscribe {
+                            //Place onPost Code Here
+
+                            progressBar.visibility = View.GONE
+                        }
+
+
+
+            //  Dependencies
+
+    // RxJava
+    implementation 'io.reactivex.rxjava2:rxjava:2.1.9'
+
+    // RxAndroid
+    implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'

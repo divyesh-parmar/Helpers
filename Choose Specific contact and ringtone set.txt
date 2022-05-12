@@ -1,0 +1,74 @@
+//Select specific Contact and set Ringtone
+
+
+	//Onclick of Button,Here myPath is filename
+ 	myPath = path;
+        Intent i = new Intent(Intent.ACTION_PICK, ContactsContract.CommonDataKinds.Phone.CONTENT_URI);
+        startActivityForResult(i, PICK_CONTACT);
+
+	//onActivityResult
+
+	 if (requestCode == PICK_CONTACT && resultCode == RESULT_OK) {
+            String phoneNo = null;
+            Uri uri2 = data2.getData();
+            Cursor cursor = getContentResolver().query(uri2, null, null, null, null);
+
+            if (cursor.moveToFirst()) {
+                int phoneIndex = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER);
+                phoneNo = cursor.getString(phoneIndex);
+                Log.e("conta", phoneNo);
+            }
+
+            cursor.close();
+
+            ContentValues values = new ContentValues();
+
+            ContentResolver resolver = getContentResolver();
+
+            File file = new File(Environment.getExternalStorageDirectory() + "/" + getResources().getString(R.string.app_name) + "/"+myPath);
+            if (file.exists()) {
+
+                Uri oldUri = MediaStore.Audio.Media.getContentUriForPath(file.getAbsolutePath());
+                resolver.delete(oldUri, MediaStore.MediaColumns.DATA + "=\"" + file.getAbsolutePath() + "\"", null);
+
+                String contact_number = phoneNo;
+                Uri lookupUri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, contact_number);
+
+                // The columns used for `Contacts.getLookupUri`
+                String[] projection = new String[] { ContactsContract.Contacts._ID,
+                        ContactsContract.Contacts.LOOKUP_KEY };
+
+                Cursor data = getContentResolver().query(lookupUri, projection, null, null, null);
+
+                if (data != null && data.moveToFirst()) {
+                    data.moveToFirst();
+                    // Get the contact lookup Uri
+                    long contactId = data.getLong(0);
+                    String lookupKey = data.getString(1);
+                    Uri contactUri = ContactsContract.Contacts.getLookupUri(contactId, lookupKey);
+
+                    values.put(MediaStore.MediaColumns.DATA, file.getAbsolutePath());
+                    values.put(MediaStore.MediaColumns.TITLE, "Beautiful");
+                    values.put(MediaStore.MediaColumns.MIME_TYPE, "audio/mp3");
+                    values.put(MediaStore.Audio.Media.IS_RINGTONE, true);
+
+                    Uri uri = MediaStore.Audio.Media.getContentUriForPath(file.getAbsolutePath());
+                    Uri newUri = resolver.insert(uri, values);
+
+                    if (newUri != null) {
+                        String uriString = newUri.toString();
+                        values.put(ContactsContract.Contacts.CUSTOM_RINGTONE, uriString);
+                        Log.e("Uri String for " + ContactsContract.Contacts.CONTENT_URI, uriString);
+                        long updated = resolver.update(contactUri, values, null, null);
+
+                        Toast.makeText(Setcaller.this, "Updated : " + updated, Toast.LENGTH_LONG).show();
+                    }
+
+                    data.close();
+                }
+
+            } else {
+                Toast.makeText(Setcaller.this, "File does not exist", Toast.LENGTH_LONG).show();
+            }
+
+        }

@@ -1,0 +1,112 @@
+public class MainActivity extends Activity {
+
+    public String[] Countrycodelist = new String[]{"91", "212", "966", "90", "92", "20", "93", "355", "213", "1684", "376", "244", "1264", "1268", "54", "374", "297", "61", "43", "994", "1242", "973", "880", "1246", "375", "32", "501", "229", "1441", "975", "591", "387", "267", "55", "246", "1284", "673", "359", "226", "257", "855", "237", "1", "238", "599", "1345", "236", "235", "56", "86", "57", "269", "243", "242", "682", "506", "225", "385", "53", "599", "357", "420", "45", "253", "1767", "1", "593", "503", "240", "291", "372", "251", "500", "298", "679", "358", "33", "594", "689", "241", "220", "995", "49", "233", "350", "30", "299", "1473", "59", "1671", "502", "224", "245", "592", "509", "504", "852", "36", "354", "62", "98", "964", "353", "972", "39", "1876", "81", "962", "7", "254", "686", "965", "996", "856", "371", "961", "266", "231", "218", "423", "370", "352", "853", "389", "261", "265", "60", "960", "223", "356", "692", "596", "222", "230", "52", "691", "373", "377", "976", "382", "1664", "258", "95", "264", "674", "977", "31", "687", "64", "505", "227", "234", "683", "672", "850", "1670", "47", "968", "680", "970", "507", "675", "595", "51", "63", "48", "351", "974", "262", "40", "7", "250", "590", "290", "1869", "1758", "590", "508", "1784", "685", "378", "239", "221", "381", "248", "232", "65", "1721", "421", "386", "677", "252", "27", "82", "211", "34", "94", "249", "597", "268", "46", "41", "963", "886", "992", "255", "66", "670", "228", "690", "676", "1868", "216", "993", "1649", "688", "1340", "256", "380", "971", "44", "1", "598", "998", "678", "39", "58", "84", "681", "260", "263"};
+
+    public int Countrycodeflag[] = {R.drawable.india, R.drawable.morocco, R.drawable.saudiarabia, R.drawable.turkey, R.drawable.pakistan,
+            R.drawable.egypt, R.drawable.afghanistan, R.drawable.albania, R.drawable.algeria, R.drawable.americansamoa, R.drawable.andorra, R.drawable.angola, R.drawable.anguilla, R.drawable.antiguaandbarbuda, R.drawable.argentina, R.drawable.armenia,
+            R.drawable.aruba, R.drawable.austalia, R.drawable.austria, R.drawable.azerbaijan, R.drawable.bahamas, R.drawable.bahrain, R.drawable.bangladesh, R.drawable.barbados, R.drawable.belarus, R.drawable.belgium, R.drawable.belize,
+            R.drawable.benin, R.drawable.bermuda, R.drawable.bhuta, R.drawable.bolivia, R.drawable.bosniaandherzegovina, R.drawable.botswana, R.drawable.brazil, R.drawable.britishindianoceanterritory, R.drawable.british_virgin_island, R.drawable.brunei, R.drawable.bulgaria,
+            R.drawable.burkina_faso, R.drawable.burundi, R.drawable.cambodia, R.drawable.cameroon, R.drawable.united_states_of_america, R.drawable.cape_verde, R.drawable.netharlands_antilles, R.drawable.cayman_islands, R.drawable.centralafricanrepublic, R.drawable.chad, R.drawable.chile,
+            R.drawable.china, R.drawable.colombia, R.drawable.comoros, R.drawable.democratic_republic_of_the_congo, R.drawable.congo, R.drawable.cook_islands, R.drawable.costarica, R.drawable.ivory_coast, R.drawable.croatia, R.drawable.cuba, R.drawable.curacao,
+            R.drawable.cyprus, R.drawable.czech_republic, R.drawable.denmark, R.drawable.djibouti, R.drawable.dominica, R.drawable.united_states_of_america, R.drawable.ecuador, R.drawable.el_salvador, R.drawable.equatorial_guinea, R.drawable.eritrea, R.drawable.estonia,
+            R.drawable.ethiopia, R.drawable.folkland_iceland, R.drawable.faroeislands, R.drawable.fiji, R.drawable.finland, R.drawable.france, R.drawable.frenchguiana, R.drawable.frenchpolynesia, R.drawable.gabon, R.drawable.gambia, R.drawable.georgia,
+            R.drawable.germany, R.drawable.ghana, R.drawable.gibraltar, R.drawable.greece, R.drawable.greenland, R.drawable.grenada, R.drawable.ecuador, R.drawable.guam, R.drawable.guatemala, R.drawable.guinea, R.drawable.guineabissau,
+            R.drawable.guyana, R.drawable.haiti, R.drawable.honduras, R.drawable.hongkong, R.drawable.hungary, R.drawable.iceland, R.drawable.indonesia, R.drawable.iran, R.drawable.iraq, R.drawable.republicofireland, R.drawable.israel, R.drawable.italy,
+            R.drawable.jamaica, R.drawable.japan, R.drawable.jordan, R.drawable.kazakhstan, R.drawable.argentina, R.drawable.kiribati, R.drawable.kuwait, R.drawable.kyrgyzstan, R.drawable.laos, R.drawable.latvia, R.drawable.lebanon,
+            R.drawable.lesotho, R.drawable.liberia, R.drawable.libya, R.drawable.liechtenstein, R.drawable.lithuania, R.drawable.luxembourg, R.drawable.macau, R.drawable.macedonia, R.drawable.madagascar, R.drawable.malawi, R.drawable.malaysia,
+            R.drawable.maldives, R.drawable.mali, R.drawable.malta, R.drawable.marshallislands, R.drawable.martinique, R.drawable.mauritania, R.drawable.mauritius, R.drawable.mexico, R.drawable.federatedstatesofmicronesia, R.drawable.moldova, R.drawable.monaco,
+            R.drawable.mongolia, R.drawable.montenegro, R.drawable.montserrat, R.drawable.mozambique, R.drawable.myanmar, R.drawable.namibia, R.drawable.nauru, R.drawable.nepal, R.drawable.kingdomofthenetherlands, R.drawable.newcaledonia, R.drawable.newzeland,
+            R.drawable.nicaragua, R.drawable.niger, R.drawable.nigeria, R.drawable.niue, R.drawable.antartica, R.drawable.northkorea, R.drawable.northernmarianaislands, R.drawable.norway, R.drawable.oman, R.drawable.palau, R.drawable.stateofpalestine,
+            R.drawable.panama, R.drawable.papuanewguinea, R.drawable.paraguay, R.drawable.peru, R.drawable.philippines, R.drawable.poland, R.drawable.portugal, R.drawable.qatar, R.drawable.reunion, R.drawable.romania, R.drawable.kazakhstan,
+            R.drawable.rwanda, R.drawable.saintbarthelemy, R.drawable.sainthelena, R.drawable.saintkittsandnevis, R.drawable.saintlucia, R.drawable.saintbarthelemy, R.drawable.saintpierreandmiquelon, R.drawable.saintvincentandthegrenadines, R.drawable.samoa, R.drawable.sanmarino, R.drawable.saotomeandprincipe,
+            R.drawable.senegal, R.drawable.serbia, R.drawable.seychelles, R.drawable.sierraleone, R.drawable.singapore, R.drawable.sintmaarten, R.drawable.slovakia, R.drawable.slovenia, R.drawable.solomonislands, R.drawable.somalia, R.drawable.southafrica,
+            R.drawable.southkorea, R.drawable.southsudan, R.drawable.spain, R.drawable.srilanka, R.drawable.sudan, R.drawable.suriname, R.drawable.eswatini, R.drawable.sweden, R.drawable.switzerland, R.drawable.syria, R.drawable.taiwan, R.drawable.tajikistan,
+            R.drawable.tanzania, R.drawable.thailand, R.drawable.timorleste, R.drawable.togo, R.drawable.tokelau, R.drawable.tonga, R.drawable.trinidadandtobago, R.drawable.tunisia, R.drawable.turkmenistan, R.drawable.turksandcaicosislands, R.drawable.tuvalu,
+            R.drawable.usvirginislands, R.drawable.uganda, R.drawable.ukraine, R.drawable.unitedarabemirates, R.drawable.unitedkingdom, R.drawable.united_states_of_america, R.drawable.uruguay, R.drawable.uzbekistan, R.drawable.vanuatu, R.drawable.italy, R.drawable.venezuela, R.drawable.vietnam,
+            R.drawable.wallis__futuna_flag, R.drawable.zambia, R.drawable.zimbabwe};
+
+
+    public String[] CountryNames = new String[]{"india", "morocco", "saudi arabia", "turkey", "pakistan",
+            "egypt", "afghanistan", "albania", "algeria", "american samoa", "andorra", "angola", "anguilla", "antigua and barbuda", "argentina", "armenia",
+            "aruba", "austalia", "austria", "azerbaijan", "bahamas", "bahrain", "bangladesh", "barbados", "belarus", "belgium", "belize",
+            "benin", "bermuda", "bhutan", "bolivia", "bosnia and herzegovina", "botswana", "brazil", "british indian ocean territory", "british virgin islands", "brunei", "bulgaria",
+            "burkina faso", "burundi", "cambodia", "cameroon", "united states of america", "cape verde", "netharlands antiless", "cayman islands", "central african republic", "chad", "chile",
+            "china", "colombia", "comoros", "democratic republic of the congo", "congo", "cook islands", "costa rica", "ivory coast", "croatia", "cuba", "curacao",
+            "cyprus", "czech republic", "denmark", "djibouti", "dominica", "united states of america", "ecuador", "el salvador", "equatorial guinea", "eritrea", "estonia",
+            "ethiopia", "folkland iceland", "faroe islands", "fiji", "finland", "france", "french guiana", "french polynesia", "gabon", "gambia", "georgia",
+            "germany", "ghana", "gibraltar", "greece", "greenland", "grenada", "ecuador", "guam", "guatemala", "guinea", "guinea bissau",
+            "guyana", "haiti", "honduras", "hong kong", "hungary", "iceland", "indonesia", "iran", "iraq", "republic of ireland", "israel", "italy",
+            "jamaica", "japan", "jordan", "kazakhstan", "argentina", "kiribati", "kuwait", "kyrgyzstan", "laos", "latvia", "lebanon",
+            "lesotho", "liberia", "libya", "liechtenstein", "lithuania", "luxembourg", "macau", "macedonia ", "madagascar", "malawi", "malaysia",
+            "maldives", "mali", "malta", "marshall islands", "martinique", "mauritania", "mauritius", "mexico", "federated states of micronesia", "moldova", "monaco",
+            "mongolia", "montenegro", "montserrat", "mozambique", "myanmar", "namibia", "nauru", "nepal", "kingdom of the netherlands", "new caledonia", "new zeland",
+            "nicaragua", "niger", "nigeria", "niue", "antartica", "north korea", "northern mariana islands", "norway", "oman", "palau", "state of palestine",
+            "panama", "papua new guinea", "paraguay", "peru", "philippines", "poland", "portugal", "qatar", "reunion", "romania", "kazakhstan",
+            "rwanda", "saint barthelemy", "saint helena", "saint kitts and nevis", "saint lucia", "saint barthelemy", "saint pierre and miquelon", "saint vincent and the grenadines", "samoa", "san marino", "sao tome and principe",
+            "senegal", "serbia", "seychelles", "sierra leone", "singapore", "sint maarten", "slovakia", "slovenia", "solomon islands", "somalia", "south africa",
+            "south korea", "south sudan", "spain", "sri lanka", "sudan", "suriname", "eswatini", "sweden", "switzerland", "syria", "taiwan", "tajikistan",
+            "tanzania", "thailand", "timor leste", "togo", "tokelau", "tonga", "trinidad and tobago", "tunisia", "turkmenistan", "turks and caicos islands", "tuvalu",
+            "u s virgin islands", "uganda", "ukraine", "united arab emirates", "united kingdom", "united states of america", "uruguay", "uzbekistan", "vanuatu", "italy", "venezuela", "vietnam",
+            "wallis and futuna", "zambia", "zimbabwe"};
+EditText filterText;
+ ArrayList<CountryModel> myDATA=new ArrayList<>();
+CustomAdapter aa;
+
+ @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+
+
+
+ ListView lists=(ListView)dialog1.findViewById(R.id.list);
+                filterText=(EditText)dialog1.findViewById(R.id.et_search);
+
+                myDATA.clear();
+                for (int i = 0; i < CountryNames.length; i++)
+                {
+                    CountryModel wp = new CountryModel(Countrycodelist[i],CountryNames[i],Countrycodeflag[i]);
+                    myDATA.add(wp);
+                }
+
+                aa = new CustomAdapter(MainActivity.this, myDATA,CountryNames);
+                lists.setAdapter(aa);
+
+                lists.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        selectedcode = myDATA.get(position).getM_code();
+
+                        flg.setImageResource(myDATA.get(position).getM_flag());
+                        countryName.setText("+"+selectedcode);
+                        dialog1.dismiss();
+                    }
+                });
+
+
+                filterText.addTextChangedListener(new TextWatcher() {
+
+                    @Override
+                    public void afterTextChanged(Editable arg0) {
+                        // TODO Auto-generated method stub
+                        String text = filterText.getText().toString().toLowerCase(Locale.getDefault());
+                        aa.filter(text);
+                    }
+
+                    @Override
+                    public void beforeTextChanged(CharSequence arg0, int arg1,
+                                                  int arg2, int arg3) {
+                        // TODO Auto-generated method stub
+                    }
+
+                    @Override
+                    public void onTextChanged(CharSequence arg0, int arg1, int arg2,
+                                              int arg3) {
+                        // TODO Auto-generated method stub
+                    }
+                });
+
+
+}
+

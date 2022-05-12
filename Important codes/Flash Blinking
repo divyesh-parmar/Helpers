@@ -1,0 +1,79 @@
+ static AsyncFlash task;
+
+
+
+    public static class AsyncFlash extends AsyncTask<Void,Void,Void>
+    {
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+
+
+
+            //ToDo something
+            Camera camera = Camera.open();
+
+            Camera.Parameters parameters = camera.getParameters();
+            long blinkDelay = 500; //Delay in ms
+            String myString = "01";
+            String q = "01";
+
+            for (int i = 0; i < myString.length(); i++) {
+                if (myString.charAt(i) == '0') {
+                    myString = myString + q;
+                    parameters.setFlashMode(Camera.Parameters.FLASH_MODE_TORCH);
+                    camera.setParameters(parameters);
+                    camera.startPreview();
+                } else {
+                    myString = myString + q;
+                    parameters.setFlashMode(parameters.FLASH_MODE_OFF);
+                   
+		     try {
+                        camera.setParameters(parameters);
+                        camera.startPreview();
+                    }catch (Exception e){
+
+                    }
+                }
+                try {
+                    Thread.sleep(blinkDelay);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+
+
+
+
+            return null;
+        }
+    }
+
+    public static void flash(Boolean checked)
+    {
+        Camera camera;
+        if (checked) {
+
+            //ToDo something
+            task = (AsyncFlash) new AsyncFlash().execute();
+
+        } else {
+
+            //ToDo something
+            try {
+                task.cancel(true);
+                camera = Camera.open();
+                Camera.Parameters parameters = camera.getParameters();
+                parameters.setFlashMode(Camera.Parameters.FLASH_MODE_OFF);
+                camera.setParameters(parameters);
+                camera.stopPreview();
+                camera.release();
+            }
+            catch (Exception e)
+            {
+                Log.e("HHH",e.toString());
+            }
+
+
+        }
+    }

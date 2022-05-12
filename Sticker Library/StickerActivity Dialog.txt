@@ -1,0 +1,328 @@
+
+
+//StickerActivity Dialog
+
+
+//Declare 
+
+    FrameLayout addframe;
+    static ArrayList<View> sticker_Views = new ArrayList<View>();
+    public static StickerView mCurrentView;
+   
+    public static Bitmap stickbit;
+ 	
+    ImageView b1, b2;
+    ImageButton backbtn;
+    public static int x = 0;
+    ImageView cat3, cat4;
+    GridView gv;
+    Dialog dialogxxx;
+    AssetManager assetManager;
+    Bitmap[] mBitArray;
+
+//Onclick of Button
+
+
+dialogxxx = new Dialog(EditingActivity.this, android.R.style.Theme_NoTitleBar_Fullscreen);
+                dialogxxx.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                dialogxxx.setCancelable(true);
+                dialogxxx.setContentView(R.layout.act_create);
+
+                backbtn = (ImageButton) dialogxxx.findViewById(R.id.backb);
+                b1 = (ImageView) dialogxxx.findViewById(R.id.classic);
+                b2 = (ImageView) dialogxxx.findViewById(R.id.Kids);
+                cat3 = (ImageView) dialogxxx.findViewById(R.id.cat3);
+                cat4 = (ImageView) dialogxxx.findViewById(R.id.cat4);
+                gv = (GridView) dialogxxx.findViewById(R.id.gridView1);
+
+                RelativeLayout.LayoutParams layoutParamssd = new RelativeLayout.LayoutParams(
+                        getResources().getDisplayMetrics().widthPixels * 130 / 1080,
+                        getResources().getDisplayMetrics().heightPixels * 110 / 1920);
+                layoutParamssd.addRule(RelativeLayout.CENTER_IN_PARENT);
+
+                b1.setLayoutParams(layoutParamssd);
+                b2.setLayoutParams(layoutParamssd);
+                cat3.setLayoutParams(layoutParamssd);
+                cat4.setLayoutParams(layoutParamssd);
+
+                backbtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialogxxx.dismiss();
+                    }
+                });
+
+                b1.setOnClickListener(new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View v) {
+
+                        b1.setImageResource(R.drawable.classic_presed);
+                        b2.setImageResource(R.drawable.kids_unpresed);
+                        cat3.setImageResource(R.drawable.funny_unpress);
+                        cat4.setImageResource(R.drawable.word_unpress);
+
+                        new AsyncHelper("category1").execute();
+                    }
+                });
+
+                b2.setOnClickListener(new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View v) {
+
+                        b1.setImageResource(R.drawable.classic_unpresed);
+                        b2.setImageResource(R.drawable.kids_presed);
+                        cat3.setImageResource(R.drawable.funny_unpress);
+                        cat4.setImageResource(R.drawable.word_unpress);
+
+                        new AsyncHelper("category2").execute();
+                    }
+                });
+
+                cat3.setOnClickListener(new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View v) {
+
+                        b1.setImageResource(R.drawable.classic_unpresed);
+                        b2.setImageResource(R.drawable.kids_unpresed);
+                        cat3.setImageResource(R.drawable.funny_press);
+                        cat4.setImageResource(R.drawable.word_unpress);
+
+                        new AsyncHelper("funny").execute();
+                    }
+                });
+
+                cat4.setOnClickListener(new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View v) {
+
+                        b1.setImageResource(R.drawable.classic_unpresed);
+                        b2.setImageResource(R.drawable.kids_unpresed);
+                        cat3.setImageResource(R.drawable.funny_unpress);
+                        cat4.setImageResource(R.drawable.word_press);
+
+                        new AsyncHelper("words").execute();
+                    }
+                });
+
+                assetManager = getAssets();
+
+                new AsyncHelper("category1").execute();
+
+                dialogxxx.show();
+
+
+
+
+//AsyncLoad Sticker
+
+ class AsyncHelper extends AsyncTask<Void, Void, Void> {
+
+        ProgressDialog dialog;
+        String Folder;
+
+        public AsyncHelper(String Fold) {
+            Folder = Fold;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            dialog = new ProgressDialog(EditingActivity.this);
+            dialog.setTitle("Loading...");
+            dialog.setCancelable(false);
+            dialog.show();
+
+            try {
+                images1 = getResources().getAssets().list(Folder);
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+
+            try {
+                // load images into memory
+                mBitArray = new Bitmap[images1.length];
+
+                for (int i = 0; i < images1.length; i++) {
+                    mBitArray[i] = getBitmapFromAsset(Folder + "/" + images1[i]);
+
+                }
+            } catch (Exception e) {
+
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            if (dialog.isShowing()) {
+                dialog.dismiss();
+            }
+
+            gv.setAdapter(new GalleryAdapter(EditingActivity.this, mBitArray));
+
+            gv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+                @Override
+                public void onItemClick(AdapterView<?> arg0, View arg1,
+                                        int position, long id) {
+
+                    Utilsdata.scalet = 6;
+                    stickbit = Utls.sanghutere;
+                    Utls.sanghutere = null;
+                    addStickerView();
+                    dialogxxx.dismiss();
+                }
+            });
+        }
+    }
+
+//Sticker Methods:
+
+
+    private void addStickerView() {
+
+        try {
+            final StickerView stickerView = new StickerView(this);
+
+            stickerView.SetStickBitmap(stickbit);
+
+            stickerView.setOperationListener(new StickerView.OperationListener() {
+                @Override
+                public void onDeleteClick() {
+                    sticker_Views.remove(stickerView);
+                    addframe.removeView(stickerView);
+                }
+
+                @Override
+                public void onEdit(StickerView stickerView) {
+                    int spos = sticker_Views.indexOf(stickerView);
+
+                  
+                    mCurrentView.setInEdit(false);
+                    mCurrentView = stickerView;
+                    mCurrentView.setInEdit(true);
+                }
+
+                @Override
+                public void onTop(StickerView stickerView) {
+                    int position = sticker_Views.indexOf(stickerView);
+                    if (position == sticker_Views.size() - 1) {
+                        return;
+                    }
+                    StickerView stickerTemp = (StickerView) sticker_Views
+                            .remove(position);
+                    sticker_Views.add(sticker_Views.size(), stickerTemp);
+                }
+            });
+            RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(
+                    RelativeLayout.LayoutParams.MATCH_PARENT,
+                    RelativeLayout.LayoutParams.MATCH_PARENT);
+            addframe.addView(stickerView, lp);
+            sticker_Views.add(stickerView);
+            setCurrentEdit(stickerView);
+        } catch (Exception e) {
+            Log.e("err", e.toString());
+        }
+
+    }
+
+    private void setCurrentEdit(StickerView stickerView) {
+        if (mCurrentView != null) {
+            mCurrentView.setInEdit(false);
+        }
+      
+        mCurrentView = stickerView;
+        stickerView.setInEdit(true);
+    }
+
+    public void setsticker(Bitmap bit, int p) {
+        stickbit = bit;
+        addStickerView();
+    }
+
+
+//Adapter
+
+    public class GalleryAdapter extends BaseAdapter {
+        // member variables
+        private Context mContext;
+        private Bitmap[] mImageArray;
+
+        // constructor
+        public GalleryAdapter(Context context, Bitmap[] imgArray) {
+            mContext = context;
+            mImageArray = imgArray;
+        }
+
+        public int getCount() {
+            return mImageArray.length;
+        }
+
+        public Object getItem(int position) {
+
+            return position;
+        }
+
+        public long getItemId(int position) {
+            return position;
+        }
+
+        // returns the individual images to the widget as it requires them
+        public View getView(final int position, View convertView, ViewGroup parent) {
+
+            LayoutInflater inflater = (LayoutInflater) mContext
+                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+            convertView = inflater.inflate(R.layout.grid_iitem, parent, false);
+
+            ImageView image = (ImageView) convertView
+                    .findViewById(R.id.img1);
+
+            RelativeLayout box = (RelativeLayout) convertView.findViewById(R.id.box);
+
+            LinearLayout.LayoutParams layoutParamssd = new LinearLayout.LayoutParams(
+                    getResources().getDisplayMetrics().widthPixels * 320 / 1080,
+                    getResources().getDisplayMetrics().heightPixels * 280 / 1920);
+            layoutParamssd.topMargin = 7;
+            layoutParamssd.gravity = Gravity.CENTER;
+            box.setLayoutParams(layoutParamssd);
+
+            Glide.with(EditingActivity.this).load(mImageArray[position]).into(image);
+
+            image.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+                    // TODO Auto-generated method stub
+                    Utls.sanghutere = mImageArray[position];
+
+                    Utilsdata.scalet = 6;
+                    stickbit = Utls.sanghutere;
+                    Utls.sanghutere = null;
+                    addStickerView();
+                    dialogxxx.dismiss();
+                }
+            });
+            return convertView;
+        }
+
+    }
+
+    private Bitmap getBitmapFromAsset(String strName) throws IOException {
+        AssetManager assetManager = getAssets();
+        InputStream istr = assetManager.open(strName);
+        Bitmap bitmap = BitmapFactory.decodeStream(istr);
+        istr.close();
+        return bitmap;
+    }

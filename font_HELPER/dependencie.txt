@@ -1,0 +1,7 @@
+compile 'uk.co.chrisjenx:calligraphy:2.2.0'
+
+//BEFORE ON CREATE
+@Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }

@@ -1,0 +1,90 @@
+//Blur Image Bitmap
+
+public static Bitmap blur(Context context,Bitmap image) {
+        if (null == image) return null;
+        Bitmap bitmap = Bitmap.createScaledBitmap(image, Math.round(((float) image.getWidth()) * BITMAP_SCALE), Math.round(((float) image.getHeight()) * BITMAP_SCALE), false);
+        Bitmap outputBitmap = Bitmap.createBitmap(bitmap);
+        final RenderScript renderScript = RenderScript.create(context);
+        Allocation tmpIn = Allocation.createFromBitmap(renderScript, image);
+        Allocation tmpOut = Allocation.createFromBitmap(renderScript, outputBitmap);
+//Intrinsic Gausian blur filter
+        ScriptIntrinsicBlur theIntrinsic = ScriptIntrinsicBlur.create(renderScript, Element.U8_4(renderScript));
+        theIntrinsic.setRadius(7);
+        theIntrinsic.setInput(tmpIn);
+        theIntrinsic.forEach(tmpOut);
+        tmpOut.copyTo(outputBitmap);
+        return outputBitmap;
+    }
+
+//Set Brightness of Image, Here float f = 1.0f;
+//f2 = (float) (i - 200); where i is progress of seekbar
+
+ Bitmap enhanceImage(Bitmap bitmap, float f, float f2) {
+        ColorMatrix colorMatrix = new ColorMatrix(new float[]{f, 0.0f, 0.0f, 0.0f, f2, 0.0f, f, 0.0f, 0.0f, f2, 0.0f, 0.0f, f, 0.0f, f2, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f});
+       Bitmap fu = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), bitmap.getConfig());
+       Canvas fu2 = new Canvas(fu);
+        Paint paint = new Paint();
+        paint.setColorFilter(new ColorMatrixColorFilter(colorMatrix));
+        fu2.drawBitmap(bitmap, 0.0f, 0.0f, paint);
+        return fu;
+    }
+
+//Set Saturation in Bitmap
+
+    private Bitmap updateSat(Bitmap bitmap, float f) {
+        Bitmap createBitmap = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Config.ARGB_8888);
+        Canvas canvas = new Canvas(createBitmap);
+        Paint paint = new Paint();
+        ColorMatrix colorMatrix = new ColorMatrix();
+        colorMatrix.setSaturation(f);
+        paint.setColorFilter(new ColorMatrixColorFilter(colorMatrix));
+        canvas.drawBitmap(bitmap, 0.0f, 0.0f, paint);
+        return createBitmap;
+    }
+
+//Blend Bitmap Blur
+
+    public static Bitmap sideBlurt(Bitmap bitmap, int i) {
+        Bitmap createBitmap = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), bitmap.getConfig());
+        Canvas canvas = new Canvas(createBitmap);
+        Paint paint = new Paint();
+        paint.setAntiAlias(true);
+        float f = (float) i;
+        paint.setMaskFilter(new BlurMaskFilter(f, Blur.NORMAL));
+        Path path = new Path();
+        path.moveTo(f, f);
+        path.lineTo((float) (canvas.getWidth() - i), f);
+        path.lineTo((float) (canvas.getWidth() - i), (float) (canvas.getHeight() - i));
+        path.lineTo(f, (float) (canvas.getHeight() - i));
+        path.lineTo(f, f);
+        path.close();
+        canvas.drawPath(path, paint);
+        paint.setXfermode(new PorterDuffXfermode(Mode.SRC_IN));
+        canvas.drawBitmap(bitmap, 0.0f, 0.0f, paint);
+        return createBitmap;
+    }
+
+
+//Rotate Bitmap Image
+
+    public static Bitmap RotateBitmap(Bitmap bitmap, float f) {
+        Matrix matrix = new Matrix();
+        matrix.postRotate(f);
+        return Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+    }
+
+//Flip Horizontally Bitmap Image
+
+    public static Bitmap LRBitmap(Bitmap bitmap) {
+        Matrix matrix = new Matrix();
+        matrix.preScale(-1.0f, 1.0f);
+        return Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+    }
+
+//Flip Vertically Bitmap Image
+
+    public static Bitmap UDBitmap(Bitmap bitmap) {
+        Matrix matrix = new Matrix();
+        matrix.preScale(1.0f, -1.0f);
+        return Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+    }

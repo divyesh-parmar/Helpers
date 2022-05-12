@@ -1,0 +1,205 @@
+package com.example.gujaratilyricalstatus;
+
+import android.app.Activity;
+import android.content.Intent;
+import android.content.res.AssetManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
+import android.view.ScaleGestureDetector;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
+
+import java.io.IOException;
+import java.io.InputStream;
+
+public class ShapeActivity extends Activity {
+
+    RelativeLayout savelay;
+    ImageView done, backy;
+    ImageView myimg;
+    RecyclerView recycleglare;
+    RecyclerView.LayoutManager lm, lm2, lm3;
+    GlareAdapter adapters;
+    private int _xDelta;
+    private int _yDelta;
+    private float scale=1f;
+    ScaleGestureDetector SGD;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_shape);
+        SGD = new ScaleGestureDetector(this,new ScaleListener());
+        savelay = findViewById(R.id.savelay);
+        myimg = findViewById(R.id.myimg);
+        done = findViewById(R.id.done);
+        backy = findViewById(R.id.backy);
+
+        recycleglare = (RecyclerView) findViewById(R.id.recycleglary);
+
+        adapters = new GlareAdapter(ShapeActivity.this, Utils.shapes_array);
+        recycleglare.setAdapter(adapters);
+        lm3 = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL,
+                false);
+        recycleglare.setLayoutManager(lm3);
+
+        backy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                onBackPressed();
+            }
+        });
+
+        done.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Utils.mynewbit=Utils.FINALBITMAP;
+                Intent returnIntent = new Intent();
+                setResult(RESULT_OK, returnIntent);
+                finish();
+            }
+        });
+
+        savelay.post(new Runnable() {
+            @Override
+            public void run() {
+
+                makeMaskImage(Utils.mBitArray[0], bitmapResize(savelay, Utils.croppy), 0, 0, 1);
+            }
+        });
+
+        myimg.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                final int X = (int) event.getRawX();
+                final int Y = (int) event.getRawY();
+                SGD.onTouchEvent(event);
+                switch (event.getAction() & MotionEvent.ACTION_MASK) {
+                    case MotionEvent.ACTION_DOWN:
+                        RelativeLayout.LayoutParams lParams = (RelativeLayout.LayoutParams) v.getLayoutParams();
+                        _xDelta = X - lParams.leftMargin;
+                        _yDelta = Y - lParams.topMargin;
+
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        break;
+                    case MotionEvent.ACTION_POINTER_DOWN:
+                        break;
+                    case MotionEvent.ACTION_POINTER_UP:
+                        break;
+                    case MotionEvent.ACTION_MOVE:
+                        ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) v.getLayoutParams();
+//                        layoutParams.leftMargin = X - _xDelta;
+//                        layoutParams.topMargin = Y - _yDelta;
+                        makeMaskImage(Utils.mBitArray[Utils.x], bitmapResize(savelay, Utils.croppy), X - _xDelta, Y - _yDelta, scale);
+                        v.setLayoutParams(layoutParams);
+                        break;
+                }
+                return true;
+            }
+        });
+
+    }
+
+
+    private Bitmap getBitmapFromAsset(String strName) throws IOException {
+        AssetManager assetManager = getAssets();
+
+        InputStream istr = assetManager.open(strName);
+        Bitmap bitmap = BitmapFactory.decodeStream(istr);
+        istr.close();
+        return bitmap;
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+//        Utils.FINALBITMAP = null;
+//        Intent intent = new Intent(ShapeActivity.this, EditActivity.class);
+//        startActivity(intent);
+
+
+        finish();
+    }
+
+    public Bitmap bitmapResize(View v, Bitmap b) {
+        int layoutwidth = v.getWidth();
+        int layoutheight = v.getHeight();
+        int imagewidth = b.getWidth();
+        int imageheight = b.getHeight();
+        ;
+        int newwidth = 0;
+        int newheight = 0;
+        if (imagewidth >= imageheight) {
+            newwidth = layoutwidth;
+            newheight = (newwidth * imageheight) / imagewidth;
+            if (newheight > layoutheight) {
+                newwidth = (layoutheight * newwidth) / newheight;
+                newheight = layoutheight;
+
+            }
+        } else {
+            newheight = layoutheight;
+            newwidth = (newheight * imagewidth) / imageheight;
+            if (newwidth > layoutwidth) {
+                newheight = (newheight * layoutwidth) / newwidth;
+                newwidth = layoutwidth;
+
+            }
+        }
+        Bitmap b56 = Bitmap.createScaledBitmap(b, newwidth, newheight, true);
+        return b56;
+
+    }
+
+    public void makeMaskImage(Bitmap bipasa, Bitmap mainImg, float x, float y, float scaleFactor) {
+
+        Bitmap userimageBitmap = mainImg;
+        Bitmap maskBitmap = bipasa;
+        maskBitmap = Bitmap.createScaledBitmap(maskBitmap, mainImg.getWidth(), mainImg.getHeight(), true);
+        userimageBitmap = Bitmap.createScaledBitmap(userimageBitmap, mainImg.getWidth(), mainImg.getHeight(), true);
+        Bitmap result = Bitmap.createBitmap(mainImg.getWidth(), mainImg.getHeight(), Bitmap.Config.ARGB_8888);
+        Canvas mCanvas = new Canvas(result);
+        Paint mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        mPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_IN));
+        mCanvas.save();
+        mCanvas.translate(x, y);
+        mCanvas.scale(scaleFactor, scaleFactor, mainImg.getWidth() / 2, mainImg.getHeight() / 2);
+        mCanvas.drawBitmap(userimageBitmap, 0, 0, null);
+        mCanvas.restore();
+        mCanvas.drawBitmap(maskBitmap, 0, 0, mPaint);
+        mPaint.setXfermode(null);
+        Utils.FINALBITMAP = result;
+        myimg.setImageBitmap(result);
+    }
+
+    public void setglare(int pos) {
+        Utils.x=pos;
+        makeMaskImage(Utils.mBitArray[pos], bitmapResize(savelay, Utils.croppy), 0, 0, 1);
+    }
+
+
+    private class ScaleListener extends ScaleGestureDetector.SimpleOnScaleGestureListener {
+        @Override
+        public boolean onScale(ScaleGestureDetector detector) {
+            scale *= detector.getScaleFactor();
+            scale = Math.max(0.1f, Math.min(scale, 5.0f));
+            return true;
+        }
+    }
+}
+

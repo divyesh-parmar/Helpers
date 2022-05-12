@@ -1,0 +1,258 @@
+
+
+//Select Image and Crop Dialog
+
+-->Add Dependency
+
+implementation 'com.theartofdev.edmodo:android-image-cropper:2.7.+'
+
+
+
+-->Call on click of Select_Image Button
+
+	selectPhoto();
+
+
+
+-->Method
+
+private void selectPhoto() {
+
+        final Dialog dialog1 = new Dialog(MainActivity.this);
+        dialog1.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog1.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        dialog1.setContentView(R.layout.dialog_imageoption);
+
+        LinearLayout yes = (LinearLayout) dialog1.findViewById(R.id.yes);
+        LinearLayout no = (LinearLayout) dialog1.findViewById(R.id.no);
+        LinearLayout rate = (LinearLayout) dialog1.findViewById(R.id.rate);
+        RelativeLayout boox = (RelativeLayout) dialog1.findViewById(R.id.boox);
+
+        RelativeLayout.LayoutParams fgg = new RelativeLayout.LayoutParams(
+                getResources().getDisplayMetrics().widthPixels * 950 / 1080,
+                getResources().getDisplayMetrics().heightPixels * 780 / 1920);
+        fgg.addRule(RelativeLayout.CENTER_IN_PARENT);
+        boox.setLayoutParams(fgg);
+
+        yes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
+
+                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+                if (Build.VERSION.SDK_INT > 19) {
+
+                    if (intent.resolveActivity(getPackageManager()) != null) {
+
+                        File photoFile = null;
+                        try {
+                            photoFile = createImageFile();
+                        } catch (IOException ex) {
+                            ex.printStackTrace();
+                        }
+
+                        if (photoFile != null) {
+
+                            fileUri = FileProvider.getUriForFile(MainActivity.this,
+                                    "com.div.curvetextx.provider",
+                                    photoFile);
+                            intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
+                            startActivityForResult(intent, CAMERA_REQUEST);
+                        }
+
+                    }
+
+                } else {
+
+                    fileUri = captureImage(MainActivity.this, CAMERA_REQUEST);
+                }
+
+                dialog1.dismiss();
+            }
+        });
+
+        rate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog1.dismiss();
+                startActivityForResult(new Intent("android.intent.action.PICK", MediaStore.Images.Media.EXTERNAL_CONTENT_URI), 4);
+            }
+        });
+
+        no.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
+                dialog1.dismiss();
+
+            }
+        });
+
+        dialog1.show();
+
+    }
+
+    public static Uri captureImage(Context mContext, int REQUEST_PHOTO) {
+
+        StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+        StrictMode.setVmPolicy(builder.build());
+        File img_path = Environment.getExternalStoragePublicDirectory(Environment
+                .DIRECTORY_PICTURES);
+        File mediaStorageDir = new File(img_path, "abc");
+        if (!mediaStorageDir.exists()) {
+            if (!mediaStorageDir.mkdirs()) {
+                Log.d("aa", "Oops! Failed create " + "abc" + " directory");
+                return null;
+            }
+        }
+        String timeStamp = new SimpleDateFormat("ddMMyyyy_HHmmss", Locale.getDefault())
+                .format(new Date());
+        File mediaFile = new File(mediaStorageDir.getPath() + File.separator + "IMG_" +
+                timeStamp + ".jpg");
+        Uri imageUri = Uri.fromFile(mediaFile);
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+        ((Activity) mContext).startActivityForResult(intent, REQUEST_PHOTO);
+        return imageUri;
+
+    }
+
+    private File createImageFile() throws IOException {
+
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,
+                ".jpg",
+                storageDir
+        );
+
+        String currentPhotoPath = image.getAbsolutePath();
+        return image;
+    }
+
+    CropImageView img;
+    ImageView btncrop, backy1;
+
+    /* access modifiers changed from: protected */
+    public void onActivityResult(int i, int i2, Intent intent) {
+        if (i2 != -1) {
+            return;
+        }
+        if (i == CAMERA_REQUEST) {
+
+            Uri selectedImage = fileUri;
+
+            final Dialog dialog1 = new Dialog(MainActivity.this, android.R.style.Theme_NoTitleBar_Fullscreen);
+            dialog1.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            dialog1.setCancelable(true);
+            dialog1.setContentView(R.layout.dialog_crop);
+
+            img = (CropImageView) dialog1.findViewById(R.id.img1);
+            btncrop = (ImageView) dialog1.findViewById(R.id.btncrop);
+            backy1 = (ImageView) dialog1.findViewById(R.id.backy1);
+            img.setFixedAspectRatio(true);
+            img.setAspectRatio(2, 2);
+            img.setImageUriAsync(selectedImage);
+
+            backy1.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // TODO Auto-generated method stub
+                    dialog1.dismiss();
+                }
+            });
+
+            btncrop.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // TODO Auto-generated method stub
+                    dialog1.dismiss();
+                    Utls.CropBit = img.getCroppedImage();
+                    new CompressAsync().execute();
+                }
+            });
+
+            dialog1.show();
+
+        } else if (i == 4) {
+
+            Uri selectedImage = intent.getData();
+
+            final Dialog dialog1 = new Dialog(MainActivity.this, android.R.style.Theme_NoTitleBar_Fullscreen);
+            dialog1.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            dialog1.setCancelable(true);
+            dialog1.setContentView(R.layout.dialog_crop);
+
+            img = (CropImageView) dialog1.findViewById(R.id.img1);
+            btncrop = (ImageView) dialog1.findViewById(R.id.btncrop);
+            backy1 = (ImageView) dialog1.findViewById(R.id.backy1);
+            img.setFixedAspectRatio(true);
+            img.setAspectRatio(2, 2);
+            img.setImageUriAsync(selectedImage);
+
+            backy1.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // TODO Auto-generated method stub
+                    dialog1.dismiss();
+                }
+            });
+
+            btncrop.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // TODO Auto-generated method stub
+                    dialog1.dismiss();
+                    Utls.CropBit = img.getCroppedImage();
+                    new CompressAsync().execute();
+                }
+            });
+
+            dialog1.show();
+        } else if (i == 7) {
+            Toast.makeText(this, "Background Set", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    class CompressAsync extends AsyncTask<Void, Void, Void> {
+
+        ProgressDialog dialog;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            dialog = new ProgressDialog(MainActivity.this);
+            dialog.setCancelable(false);
+            dialog.show();
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+         
+		Glide.with(MainActivity.this)
+                    .asBitmap()
+                    .load(Utl.CropBit).diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .into(new CustomTarget<Bitmap>() {
+                        @Override
+                        public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+			    dialog.dismiss();
+                            Utl.CropBit = resource;
+			    startActivity(new Intent(MainActivity.this,EditingActivity.class));
+                        }
+
+                        @Override
+                        public void onLoadCleared(@Nullable Drawable placeholder) {
+
+                        }
+                    });
+
+            return null;
+        }
+
+       
+    }
+
+   

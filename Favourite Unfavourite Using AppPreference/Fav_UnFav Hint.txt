@@ -1,0 +1,82 @@
+
+//Set onclick of Favourite Button
+
+	AppPreferences preferences;	//Global Declare
+
+
+//getView in Adapter 
+
+
+	preferences = new AppPreferences(mContext);
+
+        if (preferences.getStranger(image.get(position).getTitle())) {
+            favi.setImageResource(R.drawable.fav);
+        } else {
+            favi.setImageResource(R.drawable.unfav);
+        }
+
+        favi.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if (preferences.getStranger(image.get(position).getTitle())) {
+                    preferences.setStranger(image.get(position).getTitle(), false);
+                } else {
+                    preferences.setStranger(image.get(position).getTitle(), true);
+                }
+
+                notifyDataSetChanged();
+
+            }
+        });
+
+
+
+//Class of Favourite 
+
+
+private AppPreferences preferences;
+
+	 preferences = new AppPreferences(FavVideoList.this);
+
+                Fav_videos.clear();
+
+                for (int i = 0; i < videos.size(); i++) {
+                    if (preferences.getStranger(videos.get(i).getTitle())) {
+                        Fav_videos.add(videos.get(i));
+                    } else {
+
+                    }
+                }
+
+	FavVideoAdapter	vAdapter=new FavVideoAdapter(FavVideoList.this,Fav_videos);
+        grid.setAdapter(vAdapter);
+
+
+
+//Adapter of FavVideoAdapter
+
+	 if (preferences.getStranger(image.get(position).getTitle())) {
+            favi.setImageResource(R.drawable.fav);
+        } else {
+            favi.setImageResource(R.drawable.unfav);
+        }
+
+        favi.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if (preferences.getStranger(image.get(position).getTitle())) {
+                    preferences.setStranger(image.get(position).getTitle(), false);
+                    FavVideoList.Fav_videos.remove(image.get(position));
+                } else {
+                    preferences.setStranger(image.get(position).getTitle(), true);
+                }
+
+                notifyDataSetChanged();
+
+            }
+        });
+
+
+            

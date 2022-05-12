@@ -1,0 +1,413 @@
+ 
+public static int dpToPx(Context c, int dp) {
+        float f = (float) dp;
+        c.getResources();
+        return (int) (f * Resources.getSystem().getDisplayMetrics().density);
+    }
+
+
+public void copyStringInClipBoard(String text) {
+		ClipboardManager clipboard = (ClipboardManager) mContext
+				.getSystemService(Context.CLIPBOARD_SERVICE);
+		ClipData clip = ClipData.newPlainText("Link", text);
+		clipboard.setPrimaryClip(clip);
+		Toast.makeText(mContext,"Text copied in clipboard.. ",Toast.LENGTH_SHORT).show();
+
+	}
+
+
+ private String secsToTime(String str) {
+        long longValue = Long.valueOf(str).longValue() / 1000;
+        long j = longValue / 60;
+        longValue %= 60;
+        long j2 = j / 60;
+        j %= 60;
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(j);
+        stringBuilder.append(":");
+        stringBuilder.append(longValue);
+        return stringBuilder.toString();
+    }
+
+
+//Copy AssetFile to SdCard folder
+		try {
+       		    in = assetFiles.open("songs/" + st);
+                    out = new FileOutputStream(
+                            Environment.getExternalStorageDirectory() + "/" + getResources().getString(R.string.app_name) + "/"
+                                    + st);
+                    copyAssetFiles(in, out);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+    InputStream in = null;
+    OutputStream out = null;
+    AssetManager assetFiles;
+
+private static void copyAssetFiles(InputStream in, OutputStream out) {
+        try {
+
+            byte[] buffer = new byte[1024];
+            int read;
+
+            while ((read = in.read(buffer)) != -1) {
+                out.write(buffer, 0, read);
+            }
+
+            in.close();
+            in = null;
+            out.flush();
+            out.close();
+            out = null;
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+//Get Video Size from Raw files
+
+int[] vidname=new int[]{R.raw.video_0,R.raw.video_1,R.raw.video_2,
+            R.raw.video_3,R.raw.video_4,R.raw.video_5,R.raw.video_6};
+
+public void sizeOfvideos(int[] vidname)
+{
+ for(int i=0;i<vidname.length;i++){
+            InputStream is = getResources().openRawResource(vidname[i]);
+            try {
+                int sizeOfInputStram = is.available();
+                double kb =  sizeOfInputStram/ 1024;
+                double mb = kb / 1024;
+                DecimalFormat form = new DecimalFormat("0.00");
+//                holder.videoSize.setText(form.format(mb) + " mb");
+                Vid_size.add(""+form.format(mb) + " mb"); //all array of size
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+}
+
+
+
+//Millisecond to Time
+
+public static String getmilliSecondsToTimer(long milliseconds) {
+        String finalTimerString = "";
+        String secondsString = "";
+
+        // Convert total duration into time
+        int hours = (int) (milliseconds / (1000 * 60 * 60));
+        int minutes = (int) (milliseconds % (1000 * 60 * 60)) / (1000 * 60);
+        int seconds = (int) ((milliseconds % (1000 * 60 * 60)) % (1000 * 60) / 1000);
+
+        // Add hours if there
+        if (hours > 0) {
+            finalTimerString = hours + ":";
+        }
+
+        // Prepending 0 to seconds if it is one digit
+        if (seconds < 10) {
+            secondsString = "0" + seconds;
+        } else {
+            secondsString = "" + seconds;
+        }
+
+        finalTimerString = finalTimerString + minutes +":"+ secondsString;
+
+        // return timer string
+        return finalTimerString;
+    }
+
+//Get Contact Name from Contact Number
+
+public String getContactName(Context context, String phoneNumber) {
+           ContentResolver cr = context.getContentResolver();
+           Uri uri = Uri.withAppendedPath(PhoneLookup.CONTENT_FILTER_URI,
+                   Uri.encode(phoneNumber));
+           Cursor cursor = cr.query(uri, new String[] { PhoneLookup.DISPLAY_NAME }, null, null, null);
+           if (cursor == null) {
+               return "Unknown";
+           }
+           String contactName = "Unknown";
+           if (cursor.moveToFirst()) {
+               contactName = cursor.getString(cursor
+                       .getColumnIndex(PhoneLookup.DISPLAY_NAME));
+           }
+           if (cursor != null && !cursor.isClosed()) {
+        	   
+               cursor.close();
+           }
+           return contactName;
+       }
+   }
+//Remove duplicate element from arraulist<String> ;Here lock_array is yr arraylist
+
+for(int i = 0; i < lock_array.size(); i++) {
+                        for(int j = i + 1; j < lock_array.size(); j++) {
+                            if(lock_array.get(i).equals(lock_array.get(j))){
+                                lock_array.remove(j);
+                                j--;
+                            }
+                        }
+                    }
+
+
+//Copy AssetFile to sdcard New
+public static void copyAssetFile(Context mContext,String assetFilePath, String destinationFilePath) throws IOException
+    {
+        InputStream in = mContext.getAssets().open(assetFilePath);
+        OutputStream out = new FileOutputStream(destinationFilePath);
+
+        byte[] buf = new byte[1024];
+        int len;
+        while ((len = in.read(buf)) > 0)
+            out.write(buf, 0, len);
+        in.close();
+        out.close();
+    }
+
+//get contact_id from phone number
+
+public static final String contactIdByPhoneNumber(Context ctx, String phoneNumber) {
+    String contactId = null;
+    if (phoneNumber != null && phoneNumber.length() > 0) {
+        ContentResolver contentResolver = ctx.getContentResolver();
+ 
+        Uri uri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(phoneNumber));
+ 
+        String[] projection = new String[] { PhoneLookup._ID };
+ 
+        Cursor cursor = contentResolver.query(uri, projection, null, null, null);
+ 
+        if (cursor != null) {
+            while (cursor.moveToNext()) {
+                contactId = cursor.getString(cursor.getColumnIndexOrThrow(PhoneLookup._ID));
+            }
+            cursor.close();
+        }
+    }
+    return contactId;
+}
+
+//send image to particular contact on whatsapp
+		
+        //For Image Send on Whatsapp and take 1 sec delay where obj is mobile no with countrycode
+        String obj = selectedcode + nums.getText().toString();
+        Intent sendIntent = new Intent("android.intent.action.SEND");
+        Uri uri = Uri.fromFile(file);
+        sendIntent.setComponent(new ComponentName("com.whatsapp","com.whatsapp.ContactPicker"));
+        sendIntent.setType("image");
+        sendIntent.putExtra(Intent.EXTRA_STREAM,uri);
+        sendIntent.putExtra("jid", PhoneNumberUtils.stripSeparators(obj)+"@s.whatsapp.net");
+        startActivity(sendIntent);
+
+
+//Get Real path from Uri
+
+  private String getRealPathFromURI(Uri contentURI) {
+        String result;
+        Cursor cursor = getContentResolver().query(contentURI, null, null, null, null);
+        if (cursor == null) { // Source is Dropbox or other similar local file path
+            result = contentURI.getPath();
+        } else {
+            cursor.moveToFirst();
+            int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
+            result = cursor.getString(idx);
+            cursor.close();
+        }
+        return result;
+    }
+
+//Random Number Generator
+
+public static int generateRandomIntIntRange(int min, int max) {
+        Random r = new Random();
+        return r.nextInt((max - min) + 1) + min;
+    }
+
+
+//Open Video In Default Player
+
+public void OpenVideo_DefaultPlayer(String vidPATH){
+        File file = new File(vidPATH);
+
+        try {
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setDataAndType(Uri.fromFile(file), "video/*");
+            startActivity(intent);
+        } catch (ActivityNotFoundException e) {
+            Toast.makeText(cn, "Video play in default player", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+//Get Video Duration From Path
+
+private MediaMetadataRetriever metaRetriever;
+
+public String Get_Video_Time(String path) {
+        String duration;
+
+        try {
+            metaRetriever = new MediaMetadataRetriever();
+            metaRetriever.setDataSource(path);
+
+            duration = metaRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
+
+            long dur = Long.parseLong(duration);
+
+            String time = String.format("%02d:%02d",
+                    TimeUnit.MILLISECONDS.toMinutes(dur),
+                    TimeUnit.MILLISECONDS.toSeconds(dur) -
+                            TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(dur))
+            );
+
+            metaRetriever.release();
+            return time;
+        } catch (RuntimeException ex) {
+
+            /*convert millis to appropriate time*/
+            String myTmp = "02:23";
+            return myTmp;
+        }
+
+    }
+
+//Vibration ON
+
+	//Permission
+	<uses-permission android:name="android.permission.VIBRATE" />
+
+
+	//Code
+	Vibrator vibrator = (Vibrator) mContext.getSystemService("vibrator");
+
+ 	if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                vibrator.vibrate(VibrationEffect.createOneShot(500, VibrationEffect.DEFAULT_AMPLITUDE));
+            } else {
+                //deprecated in API 26
+                long[] mVibratePattern = new long[]{0, 500, 300, 500};
+
+                // -1 : Do not repeat this pattern
+                // pass 0 if you want to repeat this pattern from 0th index
+                vibrator.vibrate(mVibratePattern, 0);
+            }
+
+
+// String array to arraylist Conversion
+
+	String [] strings = new String [] {"1", "2" };
+	List<String> stringList = new ArrayList<String>(Arrays.asList(strings));
+
+
+
+//Open FullScreen Dialog
+
+	final Dialog dialog1 = new Dialog(MainActivity.this,android.R.style.Theme_NoTitleBar_Fullscreen);
+
+
+
+//Check Wifi or Internet Connection
+
+    public static boolean isNetworkAvailable(Context cn) {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) cn.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+    }
+
+
+//Create Activity Transparent
+
+
+-->In Manifest Activity
+
+	android:theme="@android:style/Theme.Translucent.NoTitleBar"
+
+
+
+//copy file from one location to another location
+
+private static void copyFileUsingStream(File source, File dest) throws IOException {
+    InputStream is = null;
+    OutputStream os = null;
+    try {
+        is = new FileInputStream(source);
+        os = new FileOutputStream(dest);
+        byte[] buffer = new byte[1024];
+        int length;
+        while ((length = is.read(buffer)) > 0) {
+            os.write(buffer, 0, length);
+        }
+    } finally {
+        is.close();
+        os.close();
+    }
+}
+
+//Join two Bitmap into single
+
+public static Bitmap Join_Bitmap(Bitmap bitmap, Bitmap bitmap2) {
+        Bitmap createBitmap = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), bitmap.getConfig());
+        float width = (float) bitmap.getWidth();
+        float height = (float) bitmap.getHeight();
+        float width2 = (float) bitmap2.getWidth();
+        float height2 = (float) bitmap2.getHeight();
+        float f = width2 / height2;
+        float f2 = height2 / width2;
+        if (width2 > width) {
+            bitmap2 = Bitmap.createScaledBitmap(bitmap2, (int) width, (int) (width * f2), false);
+        } else if (height2 > height) {
+            bitmap2 = Bitmap.createScaledBitmap(bitmap2, (int) (f * height), (int) height, false);
+        }
+        Canvas canvas = new Canvas(createBitmap);
+        canvas.drawBitmap(bitmap, 0.0f, 0.0f, null);
+        canvas.drawBitmap(bitmap2, (float) (bitmap.getWidth() - bitmap2.getWidth()), (float) (bitmap.getHeight() - bitmap2.getHeight()), null);
+        return createBitmap;
+    }
+
+//Send Msg on Whatsapp (particular Number)
+
+
+    public void SendMsgWA(String Cont_Number, String Msg) {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("https://wa.me/whatsappphonenumber");
+        stringBuilder.append(Cont_Number);
+        stringBuilder.append("/?text=");
+        stringBuilder.append(Msg);
+        String xx = stringBuilder.toString();
+        Intent intent = new Intent("android.intent.action.VIEW");
+        intent.setData(Uri.parse(xx));
+        startActivity(intent);
+    }
+
+
+//Check App is install or Not
+
+    private boolean AppInstalledOrNot(String packagename) {
+        PackageManager pm = getPackageManager();
+        boolean app_installed = false;
+        try {
+            pm.getPackageInfo(packagename, PackageManager.GET_ACTIVITIES);
+            app_installed = true;
+        } catch (PackageManager.NameNotFoundException e) {
+            app_installed = false;
+        }
+        return app_installed;
+    }
+
+
+//Database problem In Oppo or Oneplus
+
+@Override
+public void onOpen(SQLiteDatabase db) {
+super.onOpen(db);
+db.disableWriteAheadLogging();
+}
+
+

@@ -1,0 +1,49 @@
+<resources>
+    <string name="app_name">Firetext</string>
+
+
+    <string name="title_activity_display">DisplayActivity</string>
+    <string name="action_complete">carry out</string>
+    <string name="double_click_input_text">Double Click To Enter Text</string>
+    <string name="add_sticker">Add stickers</string>
+    <string name="add_bubble">Add bubbles</string>
+    <string name="complete">Done</string>
+    <string name="publish_comment">Enter Text...</string>
+    <string name="over_text_limit">You have exceeded the word limit</string>
+
+
+    <string name="btn_gellery">Gallery</string>
+    <string name="btn_mywork">MyWork</string>
+    <string name="tolbar_title">EDIT PHOTO</string>
+    <string name="tolbar_mywork">CREATED</string>
+    <string name="tolbar_title1">PhotoApp</string>
+    <string name="saved_folder_name">BirthdaycardPhoto</string>
+    <string name="color_dialog_title">Choose color</string>
+
+    <string name="folder_app_name">BirthdaycardPhoto</string>
+
+
+    <string-array name="occurence">
+        <item>Once</item>
+        <item>Weekly</item>
+    </string-array>
+
+    <string-array name="pref_alarm_play_time_entries">
+        <item>10 seconds</item>
+        <item>30 seconds</item>
+        <item>1 minute</item>
+        <item>2 minutes</item>
+        <item>3 minutes</item>
+        <item>5 minutes</item>
+    </string-array>
+
+    <string-array name="pref_alarm_play_time_values">
+        <item>10</item>
+        <item>30</item>
+        <item>60</item>
+        <item>120</item>
+        <item>180</item>
+        <item>300</item>
+    </string-array>
+
+</resources>

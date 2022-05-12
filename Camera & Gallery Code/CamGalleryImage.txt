@@ -1,0 +1,136 @@
+create.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                openFile();
+
+
+            }
+        });
+
+
+
+
+
+ private void openFile() {
+
+        final Dialog dialogpick = new Dialog(MainActivity.this);
+        dialogpick.requestWindowFeature(Window.FEATURE_NO_TITLE);
+
+        dialogpick.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+
+        dialogpick.setContentView(R.layout.dialog_pickimg);
+
+        LinearLayout boox = (LinearLayout) dialogpick.findViewById(R.id.boox);
+        ImageView gal_img = (ImageView) dialogpick.findViewById(R.id.galleryimg);
+        ImageView cam_img = (ImageView) dialogpick.findViewById(R.id.cameraimg);
+
+        RelativeLayout.LayoutParams fgg = new RelativeLayout.LayoutParams(
+                getResources().getDisplayMetrics().widthPixels * 862 / 1080,
+                getResources().getDisplayMetrics().heightPixels * 473 / 1920);
+        fgg.addRule(RelativeLayout.CENTER_IN_PARENT);
+        boox.setLayoutParams(fgg);
+
+        LinearLayout.LayoutParams yus = new LinearLayout.LayoutParams(
+                getResources().getDisplayMetrics().widthPixels * 196 / 1080,
+                getResources().getDisplayMetrics().heightPixels * 265 / 1920);
+        yus.gravity = Gravity.CENTER;
+        gal_img.setLayoutParams(yus);
+        cam_img.setLayoutParams(yus);
+
+
+        gal_img.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialogpick.dismiss();
+                getImageFromAlbum();
+
+            }
+        });
+
+        cam_img.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialogpick.dismiss();
+                fileUri = captureImage(MainActivity.this, CAMERA_REQUEST);
+            }
+        });
+
+        dialogpick.show();
+
+
+    }
+
+
+//Get Image Gallery
+
+ private void getImageFromAlbum() {
+        try {
+            Intent i = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            startActivityForResult(i, 111);
+        } catch (Exception exp) {
+            Log.i("Error", exp.toString());
+        }
+    }
+
+
+//Get Image Camera
+
+public static Uri captureImage(Context mContext, int REQUEST_PHOTO) {
+
+        StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+        StrictMode.setVmPolicy(builder.build());
+        File img_path = Environment.getExternalStoragePublicDirectory(Environment
+                .DIRECTORY_PICTURES);
+        File mediaStorageDir = new File(img_path, "abc");
+        if (!mediaStorageDir.exists()) {
+            if (!mediaStorageDir.mkdirs()) {
+                Log.d("aa", "Oops! Failed create " + "abc" + " directory");
+                return null;
+            }
+        }
+        String timeStamp = new SimpleDateFormat("ddMMyyyy_HHmmss", Locale.getDefault())
+                .format(new Date());
+        File mediaFile = new File(mediaStorageDir.getPath() + File.separator + "IMG_" +
+                timeStamp + ".jpg");
+        Uri imageUri = Uri.fromFile(mediaFile);
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+        ((Activity) mContext).startActivityForResult(intent, REQUEST_PHOTO);
+        return imageUri;
+
+    }
+
+
+//OnActivityResult
+
+@Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // TODO Auto-generated method stub
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == 111 && resultCode == RESULT_OK && null != data) {
+
+            selectedImage = data.getData();
+
+            Utilsa.seturi = selectedImage;
+
+            Intent i = new Intent(MainActivity.this, Sivraman_CropActivity.class);
+            startActivity(i);
+
+        } else if (requestCode == CAMERA_REQUEST && resultCode == RESULT_OK) {
+
+
+            Utilsa.seturi = fileUri;
+
+            Intent i = new Intent(MainActivity.this, Sivraman_CropActivity.class);
+            startActivity(i);
+
+        }
+
+    }
+
+
+
+
+

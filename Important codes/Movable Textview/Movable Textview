@@ -1,0 +1,50 @@
+https://www.skynils.com/moveable-textview-in-android/
+
+
+
+import android.app.Activity;
+import android.os.Bundle;
+import android.view.MotionEvent;
+import android.view.View;
+import android.widget.TextView;
+ 
+public class MainActivity extends Activity {
+ 
+    private TextView tvMoveableText;
+    float dX, dY;
+ 
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+ 
+        tvMoveableText=(TextView) findViewById(R.id.activity_main_tv_moveable);
+ 
+        tvMoveableText.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent event) {
+                switch (event.getAction()) {
+ 
+                    case MotionEvent.ACTION_DOWN:
+ 
+                        dX = view.getX() - event.getRawX();
+                        dY = view.getY() - event.getRawY();
+                        break;
+ 
+                    case MotionEvent.ACTION_MOVE:
+ 
+                        view.animate()
+                                .x(event.getRawX() + dX)
+                                .y(event.getRawY() + dY)
+                                .setDuration(0)
+                                .start();
+                        break;
+                    default:
+                        return false;
+                }
+                return true; // Don't miss to return as true
+            }
+        });
+ 
+    }
+}

@@ -1,0 +1,86 @@
+Create Spinner Layout:-
+
+activity_main.xml
+
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rl"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="10dp"
+    tools:context=".MainActivity"
+    android:background="#effbe4"
+    >
+    <Spinner
+        android:id="@+id/spinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        />
+</RelativeLayout>
+
+
+
+Create Custom Spinner Text in Layout:-
+
+spinner_item.xml
+
+<?xml version="1.0" encoding="utf-8"?>
+<TextView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="10dp"
+    android:background="@drawable/spinner_item_border"
+    />
+
+
+
+
+Drawable file:-
+spinner_item_border.xml
+
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="#ff2632"/>
+        </shape>
+    </item>
+    <item android:bottom="2dp">
+        <shape android:shape="rectangle">
+            <solid android:color="#d7ffa2"/>
+        </shape>
+    </item>
+</layer-list>
+
+
+
+
+In Activity:-
+
+@Override
+protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.activity_main);
+
+    // Get reference of widgets from XML layout
+    Spinner spinner = (Spinner) findViewById(R.id.spinner);
+
+    // Initializing a String Array
+    String[] plants = new String[]{
+            "Black birch",
+            "Bolean birch",
+            "Canoe birch",
+            "Cherry birch",
+            "European weeping birch"
+    };
+
+    // Initializing an ArrayAdapter
+    ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(
+            this,R.layout.spinner_item,plants
+    );
+    spinnerArrayAdapter.setDropDownViewResource(R.layout.spinner_item);
+    spinner.setAdapter(spinnerArrayAdapter);
+   }
+}

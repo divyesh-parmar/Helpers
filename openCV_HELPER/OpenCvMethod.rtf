@@ -1,0 +1,14 @@
+
+    private Bitmap detectEdges(Bitmap bitmap) {
+        Mat rgba = new Mat();
+        Utils.bitmapToMat(bitmap, rgba);
+
+        Mat edges = new Mat(rgba.size(), CvType.CV_8UC1);
+        Imgproc.cvtColor(rgba, edges, Imgproc.COLOR_RGB2GRAY, 4);
+        Imgproc.Canny(edges, edges, 10, 190);
+
+        // Don't do that at home or work it's for visualization purpose.
+        Bitmap resultBitmap = Bitmap.createBitmap(edges.cols(), edges.rows(), Bitmap.Config.ARGB_8888);
+        Utils.matToBitmap(edges, resultBitmap);
+        return resultBitmap;
+    }
